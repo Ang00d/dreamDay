@@ -1,0 +1,347 @@
+/* ============================================
+   DREAM DAY — Estilos Globales
+   Mobile-first responsive design
+   ============================================ */
+
+@import './variables.css';
+
+/* === Reset === */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* === Body === */
+body {
+  font-family: var(--font-body);
+  background: var(--crema);
+  color: var(--texto-oscuro);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Tipografía base === */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  color: var(--texto-oscuro);
+  line-height: 1.3;
+}
+
+p {
+  color: var(--texto-medio);
+  line-height: 1.8;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* === Scrollbar personalizado === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cafe-suave);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cafe-claro);
+  border-radius: 10px;
+}
+
+/* === Clases utilitarias === */
+.brand-text {
+  font-family: var(--font-brand);
+  color: var(--cafe-claro);
+}
+
+.section-subtitle {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--texto-medio);
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-family: var(--font-brand);
+  font-size: 3.5rem;
+  color: var(--cafe-claro);
+}
+
+/* === Container === */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* === Toast container (para notificaciones Vanilla JS) === */
+.toast-container {
+  position: fixed;
+  top: calc(var(--header-height) + 1rem);
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--blanco);
+  pointer-events: auto;
+  box-shadow: 0 5px 20px var(--sombra-fuerte);
+  max-width: 350px;
+}
+
+.toast-success {
+  background: var(--exito);
+}
+
+.toast-error {
+  background: var(--error);
+}
+
+.toast-info {
+  background: var(--cafe-claro);
+}
+
+.toast-warning {
+  background: var(--alerta);
+}
+
+.toast-enter {
+  animation: toastSlideIn 0.3s ease forwards;
+}
+
+.toast-exit {
+  animation: toastSlideOut 0.3s ease forwards;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* === Modal overlay genérico === */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(61, 52, 49, 0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: var(--blanco);
+  padding: 3rem;
+  border-radius: var(--radius-lg);
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 60px var(--sombra-fuerte);
+  animation: modalSlide 0.4s ease;
+}
+
+@keyframes modalSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Botones reutilizables === */
+.btn-primary {
+  background: linear-gradient(135deg, var(--cafe-claro), var(--cafe-pastel));
+  color: var(--blanco);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px var(--sombra);
+  min-height: var(--touch-min);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--sombra-fuerte);
+}
+
+.btn-secondary {
+  background: var(--blanco);
+  color: var(--texto-medio);
+  border: 2px solid var(--cafe-suave);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  transition: var(--transition);
+  min-height: var(--touch-min);
+}
+
+.btn-secondary:hover {
+  border-color: var(--cafe-claro);
+  color: var(--cafe-claro);
+}
+
+.btn-cta {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, var(--cafe-claro), var(--cafe-pastel));
+  color: var(--blanco);
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  box-shadow: 0 8px 30px var(--sombra);
+  min-height: var(--touch-min);
+}
+
+.btn-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px var(--sombra-fuerte);
+}
+
+/* === Inputs reutilizables === */
+.form-input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 2px solid var(--cafe-suave);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  background: var(--cafe-muy-claro);
+  min-height: var(--touch-min);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--cafe-claro);
+  background: var(--blanco);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--texto-medio);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Validación visual (Vanilla JS le agrega estas clases) */
+.input-valid {
+  border-color: var(--exito) !important;
+}
+
+.input-error {
+  border-color: var(--error) !important;
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  min-height: 1.2rem;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 70px;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+  }
+
+  .modal-content {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--cafe-suave);
+  border-top-color: var(--cafe-claro);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

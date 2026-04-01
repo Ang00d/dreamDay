@@ -1,0 +1,46 @@
+/* ============================================
+   DREAM DAY — Variables CSS Globales
+   Paleta café elegante + tipografías
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root {
+  /* === Paleta de Colores === */
+  --cafe-claro: #C9A68D;       /* Color principal — botones, acentos, logo */
+  --cafe-pastel: #D4B8A5;      /* Gradientes, hover states */
+  --cafe-suave: #E8D5C4;       /* Bordes, separadores, fondos secundarios */
+  --cafe-muy-claro: #F5EDE6;   /* Fondos de tarjetas, inputs, secciones alternas */
+  --crema: #FDF9F5;            /* Fondo principal del body */
+  --texto-oscuro: #3D3431;     /* Títulos, texto principal */
+  --texto-medio: #6B5B4F;      /* Texto secundario, descripciones */
+  --blanco: #FFFFFF;           /* Fondos de cards, header, modales */
+  --sombra: rgba(201, 166, 141, 0.15);
+  --sombra-fuerte: rgba(61, 52, 49, 0.1);
+  --error: #c0392b;
+  --exito: #27ae60;
+  --alerta: #f39c12;
+
+  /* === Tipografías === */
+  --font-brand: 'Great Vibes', cursive;          /* Marca "Dream Day" */
+  --font-heading: 'Cormorant Garamond', serif;   /* Subtítulos elegantes */
+  --font-body: 'Montserrat', sans-serif;         /* Texto general */
+
+  /* === Espaciado === */
+  --header-height: 80px;
+  --section-padding: 6rem 2rem;
+  --section-padding-mobile: 3rem 1rem;
+  --max-width: 1400px;
+
+  /* === Bordes === */
+  --radius-sm: 8px;
+  --radius-md: 15px;
+  --radius-lg: 20px;
+  --radius-full: 50px;
+
+  /* === Transiciones === */
+  --transition: all 0.3s ease;
+
+  /* === Touch targets (mobile-first) === */
+  --touch-min: 44px;
+}

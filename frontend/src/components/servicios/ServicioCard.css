@@ -1,0 +1,228 @@
+/* ============================================
+   SERVICIO CARD — Tarjeta pública de servicio
+   Dream Day — Paleta café
+   ============================================ */
+.servicio-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid #E8D5C4;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.servicio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(90, 62, 43, 0.12);
+  border-color: #D4B8A5;
+}
+.servicio-card.en-carrito {
+  border-color: #C9A68D;
+  box-shadow: 0 0 0 2px rgba(201, 166, 141, 0.2);
+}
+/* --- Imagen --- */
+.servicio-card-imagen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #F5EDE6;
+  overflow: hidden;
+}
+.servicio-card-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.servicio-card:hover .servicio-card-imagen img {
+  transform: none;
+}
+.servicio-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #D4B8A5;
+  background: linear-gradient(135deg, #F5EDE6 0%, #FDF9F5 100%);
+}
+.servicio-card-fotos-count {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(90, 62, 43, 0.8);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  backdrop-filter: blur(4px);
+}
+/* --- Contenido --- */
+.servicio-card-contenido {
+  padding: 0.9rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.servicio-card-nombre {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #5a3e2b;
+  margin: 0 0 0.3rem 0;
+  line-height: 1.25;
+}
+.servicio-card-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  color: #8b7355;
+  line-height: 1.45;
+  margin: 0 0 0.6rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.servicio-card-detalles {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.servicio-card-detalle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  color: #b8a08a;
+}
+/* --- Botón --- */
+.servicio-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 9px;
+  border: 1.5px solid transparent;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+.servicio-card-btn.btn-agregar {
+  background: #C9A68D;
+  color: #fff;
+  border-color: #C9A68D;
+}
+.servicio-card-btn.btn-agregar:hover {
+  background: #b8936f;
+  border-color: #b8936f;
+}
+.servicio-card-btn.btn-quitar {
+  background: #F5EDE6;
+  color: #C9A68D;
+  border-color: #D4B8A5;
+}
+.servicio-card-btn.btn-quitar:hover {
+  background: #E8D5C4;
+  color: #5a3e2b;
+}
+
+/* ============================================
+   LIGHTBOX — Visor de galería
+   ============================================ */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+}
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+.lightbox-cerrar {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px;
+}
+.lightbox-cerrar:hover {
+  color: #D4B8A5;
+}
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.lightbox-prev { left: -50px; }
+.lightbox-next { right: -50px; }
+.lightbox-counter {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+}
+
+/* --- Responsive lightbox --- */
+@media (max-width: 640px) {
+  .lightbox-prev { left: 8px; }
+  .lightbox-next { right: 8px; }
+  .lightbox-cerrar { top: -36px; right: 4px; }
+}
+
+/* --- Responsive card --- */
+@media (max-width: 480px) {
+  .servicio-card-nombre {
+    font-size: 1rem;
+  }
+  .servicio-card-desc {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 2;
+  }
+}
+
+/* Fix: desactivar hover cuando lightbox está abierto */
+.servicio-card:has(.lightbox-overlay) {
+  transform: none !important;
+  box-shadow: none !important;
+}
+.servicio-card:has(.lightbox-overlay):hover .servicio-card-imagen img {
+  transform: none !important;
+}

@@ -1,0 +1,341 @@
+/* ============================================
+   DREAM DAY — ServiciosPage.css
+   ============================================ */
+
+.servicios-admin {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.servicios-header {
+  margin-bottom: 2rem;
+}
+
+.servicios-header h1 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.8rem;
+  color: var(--texto-oscuro, #2c1810);
+  margin: 0 0 0.3rem 0;
+}
+
+.servicios-header p {
+  font-size: 0.9rem;
+  color: var(--texto-medio, #8b7355);
+  margin: 0;
+}
+
+/* Loading */
+.servicios-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  gap: 1rem;
+  color: var(--texto-medio, #8b7355);
+}
+
+.servicios-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--cafe-claro, #E8D5C4);
+  border-top-color: var(--color-primary, #C9A68D);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Grupos por categoría */
+.servicios-grupos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.servicios-grupo {
+  background: #fff;
+  border: 1px solid var(--cafe-claro, #E8D5C4);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.grupo-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  background: var(--cafe-muy-claro, #FDF9F5);
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--texto-oscuro, #2c1810);
+  transition: background 0.15s;
+}
+
+.grupo-header:hover {
+  background: var(--cafe-suave, #F5EDE6);
+}
+
+.grupo-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.grupo-icono {
+  font-size: 1.4rem;
+}
+
+.grupo-nombre {
+  font-weight: 600;
+  display: block;
+  text-align: left;
+}
+
+.grupo-conteo {
+  font-size: 0.78rem;
+  color: var(--texto-medio, #8b7355);
+  display: block;
+  text-align: left;
+}
+
+/* Filas de servicios */
+.grupo-servicios {
+  border-top: 1px solid var(--cafe-claro, #E8D5C4);
+}
+
+.servicio-fila {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.2rem;
+  border-bottom: 1px solid var(--cafe-muy-claro, #FDF9F5);
+  transition: background 0.15s;
+}
+
+.servicio-fila:last-child {
+  border-bottom: none;
+}
+
+.servicio-fila:hover {
+  background: var(--cafe-muy-claro, #FDF9F5);
+}
+
+.servicio-fila.editando {
+  background: #fffbf7;
+  border-left: 3px solid var(--color-primary, #C9A68D);
+}
+
+.servicio-fila.inactivo {
+  opacity: 0.6;
+}
+
+.servicio-fila-info {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.servicio-fila-icon {
+  color: var(--color-primary, #C9A68D);
+  flex-shrink: 0;
+}
+
+.servicio-fila-nombre {
+  font-size: 0.9rem;
+  color: var(--texto-oscuro, #2c1810);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge-inactivo {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+  background: #f5e6e6;
+  color: #8B3A3A;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Capacidad */
+.servicio-fila-capacidad {
+  min-width: 100px;
+  text-align: center;
+}
+
+.cap-display {
+  font-size: 0.85rem;
+  color: var(--texto-medio, #8b7355);
+  white-space: nowrap;
+}
+
+.capacidad-editor {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cap-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--cafe-claro, #E8D5C4);
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--texto-oscuro, #2c1810);
+  transition: background 0.15s;
+}
+
+.cap-btn:hover:not(:disabled) {
+  background: var(--cafe-suave, #F5EDE6);
+}
+
+.cap-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cap-valor {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--texto-oscuro, #2c1810);
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Estado */
+.servicio-fila-estado {
+  min-width: 80px;
+  text-align: center;
+}
+
+.estado-label {
+  font-size: 0.78rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.estado-label.activo {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.estado-label.inactivo {
+  background: #f5e6e6;
+  color: #8B3A3A;
+}
+
+.toggle-activo {
+  font-size: 0.78rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.toggle-activo.activo {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.toggle-activo.inactivo {
+  background: #f5e6e6;
+  color: #8B3A3A;
+}
+
+/* Acciones */
+.servicio-fila-acciones {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.btn-editar {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--cafe-claro, #E8D5C4);
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--texto-oscuro, #2c1810);
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-editar:hover {
+  background: var(--cafe-suave, #F5EDE6);
+}
+
+.btn-guardar {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+
+.btn-guardar:hover:not(:disabled) {
+  background: #c8e6c9;
+}
+
+.btn-guardar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-cancelar-edicion {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #f5e6e6;
+  color: #8B3A3A;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn-cancelar-edicion:hover:not(:disabled) {
+  background: #e8c8c8;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .servicio-fila {
+    grid-template-columns: 1fr auto auto;
+    grid-template-rows: auto auto;
+  }
+
+  .servicio-fila-capacidad {
+    min-width: unset;
+  }
+
+  .servicio-fila-estado {
+    display: none;
+  }
+}

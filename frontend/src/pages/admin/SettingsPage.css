@@ -1,0 +1,298 @@
+/* ============================================
+   DREAM DAY — SettingsPage.css
+   ============================================ */
+
+.settings-page {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.settings-header {
+  margin-bottom: 0.5rem;
+}
+
+.settings-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  color: var(--texto-oscuro);
+  margin: 0 0 0.3rem;
+}
+
+.settings-header p {
+  font-size: 0.88rem;
+  color: var(--texto-medio);
+  margin: 0;
+}
+
+.settings-card {
+  background: #fff;
+  border: 1px solid var(--cafe-suave, #E8D5C4);
+  border-radius: 12px;
+  padding: 1.3rem 1.5rem;
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+  color: var(--texto-oscuro);
+}
+
+.settings-card-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.settings-card-header svg {
+  color: var(--color-primary, #C9A68D);
+  flex-shrink: 0;
+}
+
+.settings-badge {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.settings-badge.activo   { background: #e8f5e9; color: #2e7d32; }
+.settings-badge.inactivo { background: #f5e6e6; color: #8B3A3A; }
+.settings-badge.neutral  { background: var(--cafe-muy-claro, #FDF9F5); color: var(--texto-medio); }
+.settings-badge.rol-superadmin { background: #fff3e0; color: #e65100; }
+.settings-badge.rol-admin      { background: #e3f2fd; color: #1565c0; }
+.settings-badge.rol-editor     { background: #f3e5f5; color: #6a1b9a; }
+
+.settings-desc {
+  font-size: 0.84rem;
+  color: var(--texto-medio);
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.settings-inline-form {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.settings-field label,
+.settings-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--texto-medio);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.settings-input {
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid var(--cafe-suave, #E8D5C4);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: var(--texto-oscuro);
+  background: #fff;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #C9A68D);
+  box-shadow: 0 0 0 3px rgba(201, 166, 141, 0.15);
+}
+
+.settings-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #C9A68D, #D4B8A5);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.settings-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.settings-btn-primary:hover:not(:disabled) { opacity: 0.9; }
+
+.settings-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  background: #f5e6e6;
+  color: #8B3A3A;
+  border: 1px solid #e8c8c8;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.settings-btn-danger:hover:not(:disabled) { background: #ffebee; }
+.settings-btn-danger:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.settings-btn-ghost {
+  padding: 0.6rem 1rem;
+  background: none;
+  border: 1.5px solid var(--cafe-suave);
+  border-radius: 8px;
+  color: var(--texto-medio);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.settings-btn-icon-danger {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5e6e6;
+  color: #8B3A3A;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.settings-btn-icon-danger:hover { background: #ffebee; }
+
+/* Sesiones */
+.settings-sesiones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.settings-sesion {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--cafe-muy-claro, #FDF9F5);
+  border-radius: 8px;
+  border: 1px solid var(--cafe-suave);
+}
+
+.settings-sesion.actual {
+  border-color: var(--color-primary, #C9A68D);
+  background: #fffbf7;
+}
+
+.settings-sesion-info {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.settings-sesion-info svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.settings-sesion-dispositivo {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texto-oscuro);
+}
+
+.settings-sesion-current {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.settings-sesion-meta {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--texto-medio);
+  margin-top: 2px;
+}
+
+/* Preferencias */
+.settings-toggle-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid var(--cafe-suave);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--texto-medio);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.settings-toggle.active {
+  border-color: var(--color-primary);
+  background: var(--cafe-muy-claro);
+  color: var(--texto-oscuro);
+  font-weight: 600;
+}
+
+/* Info grid */
+.settings-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.settings-info-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.settings-info-grid span:last-child {
+  font-size: 0.9rem;
+  color: var(--texto-oscuro);
+  font-weight: 500;
+}
+
+@media (max-width: 500px) {
+  .settings-info-grid { grid-template-columns: 1fr; }
+  .settings-inline-form { flex-direction: column; align-items: stretch; }
+}

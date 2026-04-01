@@ -1,0 +1,350 @@
+/* ============================================
+   DREAM DAY — Header
+   Mobile-first, fijo arriba, menú hamburguesa
+   ============================================ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--blanco);
+  box-shadow: 0 2px 20px var(--sombra);
+  z-index: 1000;
+  padding: 0.8rem 2rem;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* === Logo === */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  text-decoration: none;
+}
+
+.logo-container:hover {
+  transform: scale(1.02);
+}
+
+.logo-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.logo-placeholder {
+  width: 55px;
+  height: 55px;
+  border: 2px dashed var(--cafe-claro);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cafe-muy-claro);
+  font-family: var(--font-brand);
+  font-size: 1.5rem;
+  color: var(--cafe-claro);
+}
+
+.logo-text {
+  font-family: var(--font-brand);
+  font-size: 1.8rem;
+  color: var(--cafe-claro);
+  line-height: 1;
+}
+
+/* === Navegación Desktop === */
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--texto-medio);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--cafe-claro);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--cafe-claro);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.btn-admin {
+  background: linear-gradient(135deg, var(--cafe-claro), var(--cafe-pastel));
+  color: var(--blanco);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--sombra);
+  text-decoration: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.btn-admin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--sombra-fuerte);
+}
+
+/* === Carrito Badge (header) === */
+.cart-button {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: var(--texto-medio);
+  transition: color 0.3s ease;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-button:hover {
+  color: var(--cafe-claro);
+}
+
+.cart-badge {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  background: var(--cafe-claro);
+  color: var(--blanco);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-badge.hidden {
+  display: none;
+}
+
+/* === Menú Hamburguesa (mobile) === */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
+  background: none;
+  border: none;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: var(--cafe-claro);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* === Navegación Mobile === */
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  background: var(--blanco);
+  box-shadow: 0 10px 30px var(--sombra);
+  flex-direction: column;
+  max-height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.nav-mobile.active {
+  display: flex;
+}
+
+.nav-mobile-item {
+  border-bottom: 1px solid var(--cafe-muy-claro);
+}
+
+.nav-mobile-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  color: var(--texto-medio);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-height: 50px;
+}
+
+.nav-mobile-link:hover {
+  background: var(--cafe-muy-claro);
+  color: var(--cafe-claro);
+}
+
+.nav-mobile-actions {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-desktop {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .logo-text {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-img,
+  .logo-placeholder {
+    width: 45px;
+    height: 45px;
+  }
+
+  .logo-text {
+    font-size: 1.3rem;
+  }
+}
+
+/* ===== PASO 15 — Header additions ===== */
+
+.header-mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.cart-button-mobile {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--texto-medio);
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.cart-button-mobile:hover {
+  color: var(--cafe-claro);
+}
+
+.cart-button-mobile .cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cafe-claro), var(--cafe-pastel));
+  color: var(--blanco);
+  font-size: 0.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cart-button-mobile .cart-badge.hidden {
+  display: none;
+}
+
+.btn-cotizar-header {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: var(--blanco);
+  border: none;
+  border-radius: 25px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(39, 174, 96, 0.2);
+}
+
+.btn-cotizar-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+/* Ocultar cart-button-mobile en desktop (ya hay cart-button en nav-desktop) */
+@media (min-width: 769px) {
+  .cart-button-mobile {
+    display: none;
+  }
+}

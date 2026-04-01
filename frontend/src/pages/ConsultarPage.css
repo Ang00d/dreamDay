@@ -1,0 +1,368 @@
+/* ===== CONSULTAR PAGE ===== */
+.consultar-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  padding-top: 1.5rem;
+}
+
+.consultar-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ===== HEADER ===== */
+.consultar-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.consultar-brand {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.5rem;
+  color: var(--cafe-claro);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.consultar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--texto-oscuro);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 0.5rem 0;
+}
+
+.consultar-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: var(--texto-medio);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===== SEARCH FORM ===== */
+.consultar-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.consultar-input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.consultar-input-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cafe-pastel);
+  pointer-events: none;
+}
+
+.consultar-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  border: 2px solid var(--cafe-suave);
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: var(--blanco);
+  color: var(--texto-oscuro);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  text-transform: uppercase;
+}
+
+.consultar-input:focus {
+  outline: none;
+  border-color: var(--cafe-claro);
+  box-shadow: 0 0 0 3px rgba(201, 166, 141, 0.15);
+}
+
+.consultar-input::placeholder {
+  color: var(--cafe-pastel);
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.consultar-submit {
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(135deg, var(--cafe-claro), var(--cafe-pastel));
+  color: var(--blanco);
+  border: none;
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--sombra);
+  flex-shrink: 0;
+  min-width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.consultar-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--sombra-fuerte);
+}
+
+.consultar-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.consultar-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--blanco);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== ERROR ===== */
+.consultar-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(192, 57, 43, 0.08);
+  border: 1px solid rgba(192, 57, 43, 0.2);
+  border-radius: 10px;
+  color: var(--error);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== RESULT ===== */
+.consultar-result {
+  animation: resultIn 0.4s ease;
+}
+
+@keyframes resultIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== ESTADO CARD ===== */
+.consultar-estado-card {
+  background: var(--blanco);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 3px 15px var(--sombra);
+  border-left: 4px solid;
+  margin-bottom: 1rem;
+}
+
+.consultar-estado-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.consultar-estado-icon {
+  flex-shrink: 0;
+}
+
+.consultar-estado-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.consultar-estado-codigo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--texto-oscuro);
+  letter-spacing: 0.5px;
+}
+
+.consultar-estado-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.consultar-estado-msg {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  color: var(--texto-medio);
+  line-height: 1.6;
+  margin: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--cafe-muy-claro);
+}
+
+/* ===== DETALLES CARD ===== */
+.consultar-detalles-card {
+  background: var(--blanco);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 3px 15px var(--sombra);
+  margin-bottom: 1rem;
+}
+
+.consultar-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--texto-oscuro);
+  margin: 0 0 0.85rem 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--cafe-suave);
+}
+
+.consultar-detalles-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.consultar-detalle-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: var(--texto-medio);
+}
+
+.consultar-detalle-item svg {
+  color: var(--cafe-claro);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* ===== SERVICIOS LIST ===== */
+.consultar-servicios-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.consultar-servicio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--cafe-muy-claro);
+  border-radius: 8px;
+}
+
+.consultar-servicio-item svg {
+  color: var(--cafe-claro);
+  flex-shrink: 0;
+}
+
+.consultar-servicio-nombre {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  color: var(--texto-oscuro);
+  font-weight: 500;
+  flex: 1;
+}
+
+.consultar-servicio-cant {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: var(--cafe-claro);
+  font-weight: 600;
+}
+
+/* ===== WHATSAPP ===== */
+.consultar-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem;
+  background: #25D366;
+  color: var(--blanco);
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+  margin-bottom: 0.75rem;
+}
+
+.consultar-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+}
+
+/* ===== OTRA BÚSQUEDA ===== */
+.consultar-otra {
+  display: block;
+  width: 100%;
+  padding: 0.7rem;
+  background: none;
+  border: none;
+  color: var(--texto-medio);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.consultar-otra:hover {
+  color: var(--cafe-claro);
+}
+
+/* ===== NOT FOUND ===== */
+.consultar-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--cafe-pastel);
+}
+
+.consultar-not-found p {
+  margin-top: 0.75rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: var(--texto-medio);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+  .consultar-page {
+    padding: 1rem;
+  }
+
+  .consultar-brand {
+    font-size: 2rem;
+  }
+
+  .consultar-form {
+    flex-direction: column;
+  }
+
+  .consultar-submit {
+    width: 100%;
+  }
+}
