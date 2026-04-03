@@ -28,30 +28,30 @@ export default function AdminLayout() {
 
   const closeSidebar = () => setSidebarOpen(false);
 
-  const rol = admin?.rol || 'editor';
+  const rol = admin?.rol || 'user';
 
-  // ── Navegación dinámica según rol ─────────────────────────
-  // superadmin: acceso total
-  // admin:      todo excepto Usuarios
-  // editor:     solo Dashboard, Cotizaciones y Configuración
+  // ── Navegación dinámica según rol (RBAC — 4 roles) ────────
+  // superadmin: acceso total (7 opciones)
+  // admin:      todo excepto Usuarios (6 opciones)
+  // editor:     Dashboard, Cotizaciones y Configuración (3 opciones)
+  // user:       solo Dashboard y Configuración (2 opciones)
   const todosLosItems = [
-    { to: '/admin/dashboard',      icon: <LayoutDashboard size={20} />, label: 'Dashboard',       roles: ['superadmin', 'admin', 'editor'] },
+    { to: '/admin/dashboard',      icon: <LayoutDashboard size={20} />, label: 'Dashboard',       roles: ['superadmin', 'admin', 'editor', 'user'] },
     { to: '/admin/cotizaciones',   icon: <FileText size={20} />,        label: 'Cotizaciones',    roles: ['superadmin', 'admin', 'editor'] },
     { to: '/admin/disponibilidad', icon: <Calendar size={20} />,        label: 'Disponibilidad',  roles: ['superadmin', 'admin'] },
     { to: '/admin/servicios',      icon: <Package size={20} />,         label: 'Servicios',       roles: ['superadmin', 'admin'] },
     { to: '/admin/imagenes',       icon: <ImageIcon size={20} />,       label: 'Imágenes',        roles: ['superadmin', 'admin'] },
-    { to: '/admin/settings',       icon: <Settings size={20} />,        label: 'Configuración',   roles: ['superadmin', 'admin', 'editor'] },
+    { to: '/admin/settings',       icon: <Settings size={20} />,        label: 'Configuración',   roles: ['superadmin', 'admin', 'editor', 'user'] },
     { to: '/admin/usuarios',       icon: <Users size={20} />,           label: 'Usuarios',        roles: ['superadmin'] },
   ];
 
-  // Filtrar solo los items que el rol actual puede ver
   const navItems = todosLosItems.filter(item => item.roles.includes(rol));
 
-  // Etiqueta amigable del rol
   const rolLabel = {
     superadmin: 'Super Admin',
     admin: 'Administrador',
-    editor: 'Editor'
+    editor: 'Editor',
+    user: 'Usuario'
   };
 
   return (

@@ -1,9 +1,10 @@
 /* ============================================
    DREAM DAY — Modelo: Usuario
-   Actualizado para Práctica 3 — Autenticación
+   Práctica 2 — Roles actualizados (4 roles)
    
-   Roles: superadmin | admin | editor
+   Roles: superadmin | admin | editor | user
    MFA:   activable por usuario
+   ABAC:  atributos para control de acceso
    ============================================ */
 
 var mongoose = require('mongoose');
@@ -29,8 +30,8 @@ var usuarioSchema = new mongoose.Schema({
   },
   rol: {
     type: String,
-    enum: ['superadmin', 'admin', 'editor'],
-    default: 'editor'
+    enum: ['superadmin', 'admin', 'editor', 'user'],
+    default: 'user'
   },
   activo: {
     type: Boolean,
@@ -55,6 +56,17 @@ var usuarioSchema = new mongoose.Schema({
   preferencias: {
     tema: { type: String, enum: ['claro', 'oscuro'], default: 'claro' },
     idioma: { type: String, default: 'es' }
+  },
+  // ── ABAC: Atributos para control de acceso ──────────────
+  departamento: {
+    type: String,
+    enum: ['ventas', 'operaciones', 'marketing', 'gerencia', 'general'],
+    default: 'general'
+  },
+  region: {
+    type: String,
+    enum: ['aguascalientes', 'nacional', 'todas'],
+    default: 'aguascalientes'
   },
   // Seguridad: intentos fallidos de login
   intentosFallidos: {

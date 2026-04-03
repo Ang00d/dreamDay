@@ -16,6 +16,7 @@ var path = require('path');
 var sessionsRouter  = require('./routes/sessions');
 var settingsRouter  = require('./routes/settings');
 var ssoRouter       = require('./routes/sso');
+var microserviciosRouter = require('./routes/microservicios');
 var usuariosRouter  = require('./routes/usuarios');
 
 // Configuracion
@@ -62,6 +63,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api/auth/sessions', sessionsRouter);
 app.use('/api/auth/settings', settingsRouter);
 app.use('/api/sso', ssoRouter);
+app.use('/api/microservicios', microserviciosRouter);
 app.use('/api/admin/usuarios', usuariosRouter);
 
 // ============================================
