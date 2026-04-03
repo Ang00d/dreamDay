@@ -42,7 +42,7 @@ app.use(helmet());
 // CORS: permitir requests del frontend
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? 'https://tu-dominio.com'
+    ? (process.env.FRONTEND_URL || 'https://dream-day-six.vercel.app')
     : 'http://localhost:5173',
   credentials: true
 }));
