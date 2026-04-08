@@ -50,7 +50,7 @@ function FormularioWizard() {
         nombre: item.nombre,
         categoria: item.categoria || '',
         descripcionCorta: item.descripcionCorta || '',
-        cantidad: 1,
+        cantidad: (item.tipoPrecio === 'precio_fijo' || item.tipoPrecio === 'por_persona') ? 1 : (item.requisitoMinimo && item.requisitoMinimo.cantidad ? item.requisitoMinimo.cantidad : 1),
         tipoPrecio: item.tipoPrecio || 'precio_fijo',
         requisitoMinimo: item.requisitoMinimo || { cantidad: 1, unidad: 'unidad' }
       };
