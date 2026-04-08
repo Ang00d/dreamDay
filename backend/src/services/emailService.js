@@ -1,3 +1,4 @@
+var dns = require("dns"); dns.setDefaultResultOrder("ipv4first");
 /* ============================================
    DREAM DAY — Servicio: Email
    
