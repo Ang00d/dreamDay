@@ -3,14 +3,18 @@
    
    El usuario elige fecha, hora y personas.
    Consulta disponibilidad de cada servicio
-   y muestra avisos si alguno ya esta ocupado.
+   y muestra un MODAL si alguno ya está ocupado.
+   Comunica los avisos al FormularioWizard para
+   bloquear el envío si hay servicios no disponibles.
    ============================================ */
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
+import Modal from '../ui/Modal';
 
-function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosChange, onConsultandoChange }) {
+function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosChange }) {
   var [avisos, setAvisos] = useState([]);
   var [consultando, setConsultando] = useState(false);
+  var [modalAbierto, setModalAbierto] = useState(false);
 
   // Calcular mínimo de personas requerido por los servicios del carrito
   var minPersonas = 1;
@@ -23,7 +27,7 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
     });
   }
 
-  // Fecha minima: manana
+  // Fecha minima: mañana
   var hoy = new Date();
   hoy.setDate(hoy.getDate() + 1);
   var fechaMinima = hoy.toISOString().split('T')[0];
@@ -42,6 +46,7 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
   useEffect(function () {
     if (!fecha || !servicios || servicios.length === 0) {
       setAvisos([]);
+      if (onAvisosChange) onAvisosChange([]);
       return;
     }
 
@@ -58,7 +63,8 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
           if (!data.disponible) {
             nuevosAvisos.push({
               nombre: s.nombre,
-              estado: data.estado
+              estado: data.estado,
+              servicioId: s.servicioId
             });
           }
         } catch (err) {
@@ -68,6 +74,12 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
       if (!cancelado) {
         setAvisos(nuevosAvisos);
         setConsultando(false);
+        // Comunicar al padre
+        if (onAvisosChange) onAvisosChange(nuevosAvisos);
+        // Mostrar modal automáticamente si hay servicios no disponibles
+        if (nuevosAvisos.length > 0) {
+          setModalAbierto(true);
+        }
       }
     }
 
@@ -139,7 +151,7 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
         </div>
       </div>
 
-      {/* Avisos de disponibilidad */}
+      {/* Indicador de verificación */}
       {consultando && fecha && (
         <div style={{
           background: '#FFF8E7',
@@ -154,17 +166,18 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
         </div>
       )}
 
+      {/* Aviso inline: servicios NO disponibles */}
       {avisos.length > 0 && !consultando && (
         <div style={{
           background: '#FFF0F0',
-          border: '1.5px solid #E88',
+          border: '2px solid #E88',
           padding: '1rem 1.2rem',
           borderRadius: '10px',
           marginTop: '1.2rem',
           fontSize: '0.88rem',
           color: '#8B3A3A'
         }}>
-          <strong>⚠️ Servicios no disponibles para esta fecha:</strong>
+          <strong>⚠️ {avisos.length} servicio(s) no disponible(s) para esta fecha:</strong>
           <ul style={{ margin: '0.5rem 0 0 1.2rem', padding: 0 }}>
             {avisos.map(function (a) {
               return (
@@ -177,13 +190,29 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
               );
             })}
           </ul>
-          <p style={{ marginTop: '0.6rem', fontSize: '0.82rem', color: '#666' }}>
-            Puedes elegir otra fecha o continuar sin esos servicios. Si envías la cotización,
-            el admin no podrá confirmarla hasta que haya disponibilidad.
+          <p style={{ marginTop: '0.8rem', fontSize: '0.85rem', color: '#c0392b', fontWeight: '600' }}>
+            No podrás enviar la cotización hasta que elijas una fecha donde todos los servicios estén disponibles, o elimines los servicios no disponibles.
           </p>
+          <button
+            onClick={function () { setModalAbierto(true); }}
+            style={{
+              marginTop: '0.5rem',
+              padding: '0.5rem 1rem',
+              background: '#e74c3c',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '0.82rem',
+              fontWeight: '600'
+            }}
+          >
+            Ver detalles
+          </button>
         </div>
       )}
 
+      {/* Aviso inline: todo disponible */}
       {avisos.length === 0 && !consultando && fecha && (
         <div style={{
           background: '#F0FFF4',
@@ -210,6 +239,53 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
         una solicitud. Confirmaremos la disponibilidad y te contactaremos por WhatsApp para
         finalizar los detalles.
       </div>
+
+      {/* ══════════ MODAL DE ALERTA ══════════ */}
+      <Modal
+        abierto={modalAbierto}
+        onCerrar={function () { setModalAbierto(false); }}
+        titulo="Servicios no disponibles"
+        tipo="alerta"
+      >
+        <p>
+          Los siguientes servicios <strong>no están disponibles</strong> para la fecha seleccionada
+          (<strong>{fecha ? new Date(fecha + 'T12:00:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}</strong>):
+        </p>
+
+        {avisos.map(function (a) {
+          return (
+            <div key={a.nombre} className="modal-servicio-item">
+              <span>🚫</span>
+              <div>
+                <strong>{a.nombre}</strong>
+                <br />
+                <span style={{ fontSize: '0.8rem', color: '#888' }}>
+                  {a.estado === 'ocupado'
+                    ? 'Ya tiene una reserva confirmada ese día'
+                    : 'Bloqueado por el administrador'}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+
+        <p style={{ marginTop: '1rem', fontWeight: '500' }}>
+          Para continuar tienes dos opciones:
+        </p>
+        <ul>
+          <li><strong>Elegir otra fecha</strong> donde todos estén disponibles</li>
+          <li><strong>Eliminar los servicios</strong> no disponibles de tu cotización (en el paso 1)</li>
+        </ul>
+
+        <div className="modal-botones">
+          <button
+            className="modal-btn modal-btn-primario"
+            onClick={function () { setModalAbierto(false); }}
+          >
+            Entendido, elegiré otra fecha
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

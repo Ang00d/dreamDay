@@ -1,11 +1,14 @@
 /* ============================================
    DREAM DAY — FormularioWizard
    
-   Wizard de 3 pasos para solicitar cotizacion:
+   Wizard de 3 pasos para solicitar cotización:
    1. Revisar servicios seleccionados
    2. Elegir fecha y hora
    3. Datos del cliente
-   → Pantalla de exito con codigo
+   → Pantalla de éxito con código
+   
+   MEJORA: Bloquea el avance al paso 3 y el envío
+   si hay servicios no disponibles en la fecha elegida.
    ============================================ */
 
 import { useState } from 'react';
@@ -14,6 +17,7 @@ import carritoStorage from '../../utils/carrito';
 import { showToast } from '../../utils/toast';
 import frontendLogger from '../../utils/frontendLogger';
 import cotizacionesService from '../../services/cotizacionesService';
+import Modal from '../ui/Modal';
 import PasoServicios from './PasoServicios';
 import PasoFecha from './PasoFecha';
 import PasoDatos from './PasoDatos';
@@ -32,6 +36,11 @@ function FormularioWizard() {
   var [enviando, setEnviando] = useState(false);
   var [respuestaExito, setRespuestaExito] = useState(null);
 
+  // Avisos de disponibilidad recibidos del PasoFecha
+  var [avisosDisponibilidad, setAvisosDisponibilidad] = useState([]);
+  // Modal de bloqueo cuando intentan avanzar con servicios no disponibles
+  var [modalBloqueo, setModalBloqueo] = useState(false);
+
   // Estado del formulario completo
   var [formData, setFormData] = useState({
     // Paso 1: Servicios (se carga del carrito)
@@ -42,6 +51,7 @@ function FormularioWizard() {
         categoria: item.categoria || '',
         descripcionCorta: item.descripcionCorta || '',
         cantidad: 1,
+        tipoPrecio: item.tipoPrecio || 'precio_fijo',
         requisitoMinimo: item.requisitoMinimo || { cantidad: 1, unidad: 'unidad' }
       };
     }),
@@ -92,6 +102,16 @@ function FormularioWizard() {
     });
     carritoStorage.eliminar(servicioId);
     window.dispatchEvent(new Event('carritoActualizado'));
+
+    // Limpiar el aviso del servicio eliminado
+    setAvisosDisponibilidad(function (prev) {
+      return prev.filter(function (a) { return a.servicioId !== servicioId; });
+    });
+  }
+
+  // Recibir avisos de disponibilidad del PasoFecha
+  function handleAvisosChange(nuevosAvisos) {
+    setAvisosDisponibilidad(nuevosAvisos);
   }
 
   // Validar el paso actual antes de avanzar
@@ -101,7 +121,6 @@ function FormularioWizard() {
         showToast('Agrega al menos un servicio', 'error');
         return false;
       }
-      // Verificar cantidades
       for (var i = 0; i < formData.servicios.length; i++) {
         var s = formData.servicios[i];
         if (!s.cantidad || s.cantidad < 1) {
@@ -117,7 +136,6 @@ function FormularioWizard() {
         showToast('Selecciona una fecha para el evento', 'error');
         return false;
       }
-      // Verificar que no sea fecha pasada
       var hoy = new Date().toISOString().split('T')[0];
       if (formData.fecha < hoy) {
         showToast('La fecha no puede ser en el pasado', 'error');
@@ -131,7 +149,7 @@ function FormularioWizard() {
         showToast('Indica la cantidad de personas', 'error');
         return false;
       }
-      // Verificar mínimo de personas requerido por los servicios
+      // Verificar mínimo de personas
       var minReq = 1;
       formData.servicios.forEach(function (s) {
         if (s.requisitoMinimo && s.requisitoMinimo.unidad === 'personas') {
@@ -143,6 +161,13 @@ function FormularioWizard() {
         showToast('Se requieren mínimo ' + minReq + ' personas para los servicios seleccionados', 'error');
         return false;
       }
+
+      // ★ BLOQUEAR si hay servicios no disponibles
+      if (avisosDisponibilidad.length > 0) {
+        setModalBloqueo(true);
+        return false;
+      }
+
       return true;
     }
 
@@ -152,19 +177,19 @@ function FormularioWizard() {
         return false;
       }
       if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        showToast('Ingresa un email valido', 'error');
+        showToast('Ingresa un email válido', 'error');
         return false;
       }
       if (!formData.telefono || !/^\d{10}$/.test(formData.telefono)) {
-        showToast('El telefono debe tener 10 digitos', 'error');
+        showToast('El teléfono debe tener 10 dígitos', 'error');
         return false;
       }
       if (!formData.ubicacion || formData.ubicacion.trim().length < 5) {
-        showToast('La ubicacion debe tener al menos 5 caracteres', 'error');
+        showToast('La ubicación debe tener al menos 5 caracteres', 'error');
         return false;
       }
       if (!formData.codigoPostal || !/^\d{5}$/.test(formData.codigoPostal)) {
-        showToast('El codigo postal debe tener 5 digitos', 'error');
+        showToast('El código postal debe tener 5 dígitos', 'error');
         return false;
       }
       return true;
@@ -188,9 +213,15 @@ function FormularioWizard() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Enviar la cotizacion al backend
+  // Enviar la cotización al backend
   async function enviarCotizacion() {
     if (!validarPaso()) return;
+
+    // Doble verificación: no enviar si hay servicios no disponibles
+    if (avisosDisponibilidad.length > 0) {
+      setModalBloqueo(true);
+      return;
+    }
 
     try {
       setEnviando(true);
@@ -225,9 +256,9 @@ function FormularioWizard() {
       window.dispatchEvent(new Event('carritoActualizado'));
 
       setRespuestaExito(respuesta);
-      setPasoActual(4); // Pantalla de exito
+      setPasoActual(4);
 
-      frontendLogger.info('Cotizacion enviada exitosamente', {
+      frontendLogger.info('Cotización enviada exitosamente', {
         codigo: respuesta.codigoReferencia,
         servicios: datos.servicios.length
       });
@@ -235,15 +266,15 @@ function FormularioWizard() {
     } catch (err) {
       var mensaje = err.response && err.response.data && err.response.data.error
         ? err.response.data.error
-        : 'Error al enviar la cotizacion. Intenta de nuevo.';
+        : 'Error al enviar la cotización. Intenta de nuevo.';
       showToast(mensaje, 'error', 5000);
-      frontendLogger.error('Error enviando cotizacion', { message: err.message });
+      frontendLogger.error('Error enviando cotización', { message: err.message });
     } finally {
       setEnviando(false);
     }
   }
 
-  // Si ya se envio, mostrar pantalla de exito
+  // Si ya se envió, mostrar pantalla de éxito
   if (pasoActual === 4 && respuestaExito) {
     return (
       <div className="wizard">
@@ -257,6 +288,12 @@ function FormularioWizard() {
         </div>
       </div>
     );
+  }
+
+  // Determinar si el botón siguiente debe estar deshabilitado
+  var siguienteDeshabilitado = false;
+  if (pasoActual === 2 && avisosDisponibilidad.length > 0) {
+    siguienteDeshabilitado = true;
   }
 
   return (
@@ -304,6 +341,7 @@ function FormularioWizard() {
               personas={formData.personas}
               servicios={formData.servicios}
               onUpdate={updateField}
+              onAvisosChange={handleAvisosChange}
             />
           )}
 
@@ -320,7 +358,7 @@ function FormularioWizard() {
           )}
         </div>
 
-        {/* Navegacion */}
+        {/* Navegación */}
         <div className="wizard-nav">
           {pasoActual > 1 ? (
             <button className="btn-anterior" onClick={anterior}>
@@ -331,8 +369,12 @@ function FormularioWizard() {
           )}
 
           {pasoActual < 3 ? (
-            <button className="btn-siguiente" onClick={siguiente}>
-              Siguiente →
+            <button
+              className={'btn-siguiente' + (siguienteDeshabilitado ? ' btn-bloqueado' : '')}
+              onClick={siguienteDeshabilitado ? function () { setModalBloqueo(true); } : siguiente}
+              style={siguienteDeshabilitado ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+            >
+              {siguienteDeshabilitado ? '⚠️ Servicios no disponibles' : 'Siguiente →'}
             </button>
           ) : (
             <button
@@ -345,6 +387,62 @@ function FormularioWizard() {
           )}
         </div>
       </div>
+
+      {/* ══════════ MODAL DE BLOQUEO ══════════ */}
+      <Modal
+        abierto={modalBloqueo}
+        onCerrar={function () { setModalBloqueo(false); }}
+        titulo="No puedes continuar"
+        tipo="alerta"
+      >
+        <p>
+          No es posible enviar tu cotización porque los siguientes servicios
+          <strong> no están disponibles</strong> en la fecha seleccionada:
+        </p>
+
+        {avisosDisponibilidad.map(function (a) {
+          return (
+            <div key={a.nombre} className="modal-servicio-item">
+              <span>🚫</span>
+              <div>
+                <strong>{a.nombre}</strong>
+                <br />
+                <span style={{ fontSize: '0.8rem', color: '#888' }}>
+                  {a.estado === 'ocupado'
+                    ? 'Ya tiene una reserva confirmada'
+                    : 'Bloqueado por el administrador'}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+
+        <p style={{ marginTop: '1rem' }}>
+          Para continuar puedes:
+        </p>
+        <ul>
+          <li><strong>Cambiar la fecha</strong> del evento</li>
+          <li><strong>Eliminar los servicios</strong> no disponibles (paso 1)</li>
+        </ul>
+
+        <div className="modal-botones">
+          <button
+            className="modal-btn modal-btn-secundario"
+            onClick={function () {
+              setModalBloqueo(false);
+              setPasoActual(1);
+            }}
+          >
+            Ir al paso 1
+          </button>
+          <button
+            className="modal-btn modal-btn-primario"
+            onClick={function () { setModalBloqueo(false); }}
+          >
+            Cambiar fecha
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

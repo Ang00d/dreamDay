@@ -1,0 +1,233 @@
+/* ============================================
+   DREAM DAY — Modal / Dialog
+   Estilos consistentes con el design system
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-contenido {
+  background: var(--blanco, #fff);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  animation: modalSlideIn 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Botón cerrar */
+.modal-cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--texto-medio, #888);
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-cerrar:hover {
+  background: var(--cafe-muy-claro, #f5f0eb);
+  color: var(--texto-oscuro, #333);
+}
+
+/* Header */
+.modal-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.modal-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 0.75rem;
+}
+
+.modal-icono-alerta {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+}
+
+.modal-icono-exito {
+  background: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+}
+
+.modal-icono-info {
+  background: rgba(52, 152, 219, 0.1);
+  color: #3498db;
+}
+
+.modal-icono-confirmar {
+  background: rgba(243, 156, 18, 0.1);
+  color: #f39c12;
+}
+
+.modal-titulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--texto-oscuro, #333);
+  margin: 0;
+}
+
+/* Body */
+.modal-body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: var(--texto-medio, #666);
+  line-height: 1.6;
+}
+
+.modal-body p {
+  margin-bottom: 0.75rem;
+}
+
+.modal-body ul {
+  margin: 0.5rem 0 1rem 1.2rem;
+  padding: 0;
+}
+
+.modal-body ul li {
+  margin-bottom: 0.4rem;
+}
+
+.modal-body strong {
+  color: var(--texto-oscuro, #333);
+}
+
+/* Botones del modal */
+.modal-botones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-height: 44px;
+}
+
+.modal-btn-primario {
+  background: linear-gradient(135deg, var(--cafe-claro, #C9A68D), var(--cafe-pastel, #D4B8A5));
+  border: none;
+  color: var(--blanco, #fff);
+}
+
+.modal-btn-primario:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--sombra, rgba(0,0,0,0.1));
+}
+
+.modal-btn-secundario {
+  background: var(--blanco, #fff);
+  border: 2px solid var(--cafe-suave, #E8D5C4);
+  color: var(--texto-medio, #666);
+}
+
+.modal-btn-secundario:hover {
+  border-color: var(--cafe-claro, #C9A68D);
+  color: var(--cafe-claro, #C9A68D);
+}
+
+.modal-btn-peligro {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  border: none;
+  color: #fff;
+}
+
+.modal-btn-peligro:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+/* Tipo: borde superior por tipo */
+.modal-alerta {
+  border-top: 4px solid #e74c3c;
+}
+
+.modal-exito {
+  border-top: 4px solid #2ecc71;
+}
+
+.modal-info {
+  border-top: 4px solid #3498db;
+}
+
+.modal-confirmar {
+  border-top: 4px solid #f39c12;
+}
+
+/* Lista de servicios no disponibles */
+.modal-servicio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(231, 76, 60, 0.06);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.modal-servicio-item strong {
+  color: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .modal-contenido {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .modal-botones {
+    flex-direction: column;
+  }
+
+  .modal-titulo {
+    font-size: 1.2rem;
+  }
+}

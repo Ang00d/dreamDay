@@ -129,6 +129,8 @@ async function iniciar() {
   try {
     await connectDB();
 
+    // Auto-archivar cotizaciones vencidas
+    require("./utils/autoArchivar").iniciar();
     app.listen(PORT, function () {
       logger.info('Servidor Dream Day iniciado', {
         context: {

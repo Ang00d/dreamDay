@@ -98,6 +98,7 @@ function HomePage() {
       descripcionCorta: servicio.descripcionCorta,
       requisitoMinimo: servicio.requisitoMinimo,
       duracionHoras: servicio.duracionHoras,
+      tipoPrecio: servicio.tipoPrecio || 'precio_fijo',
       imagenPrincipal: servicio.imagenes && servicio.imagenes.length > 0
         ? servicio.imagenes[0].url
         : null
