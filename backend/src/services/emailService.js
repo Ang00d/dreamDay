@@ -39,7 +39,7 @@ async function enviarEmail(para, asunto, html) {
     } catch (err) {
       logger.error('Error enviando email', { error: { message: err.message } });
       // Fallback a simulado si falla
-      console.log('\n⚠️  Error enviando email real, mostrando en consola:');
+      console.log('\n⚠️  Error enviando email: ' + err.message);
     }
   }
 
