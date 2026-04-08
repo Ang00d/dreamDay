@@ -1,55 +1,51 @@
 /* ============================================
-   DREAM DAY — Servicio: Email
+   DREAM DAY — Servicio: Email (Resend)
    
-   En producción: envía emails reales con Gmail SMTP
+   Usa Resend (HTTP API) para enviar emails reales.
+   No requiere SMTP — evita problemas IPv4/IPv6.
+   
+   En producción: envía emails reales via Resend
    En desarrollo: simula en consola
-   
-   Fix: fuerza IPv4 para Render free tier
    ============================================ */
 
-var nodemailer = require('nodemailer');
-var dns = require('dns');
 var logger = require('../config/logger');
 
-// ── Configurar transporter de Gmail con IPv4 forzado ─────────
-var transporter = null;
-if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-  transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    },
-    // Forzar IPv4 — resuelve el error ENETUNREACH en Render
-    dnsLookup: function (hostname, options, callback) {
-      dns.resolve4(hostname, function (err, addresses) {
-        if (err) return callback(err);
-        callback(null, addresses[0], 4);
-      });
-    },
-    tls: {
-      rejectUnauthorized: false
-    }
-  });
-  logger.info('Email: configurado con Gmail SMTP (IPv4 forzado)', { context: { user: process.env.EMAIL_USER } });
+var RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+var FROM_EMAIL = process.env.FROM_EMAIL || 'Dream Day <onboarding@resend.dev>';
+
+if (RESEND_API_KEY) {
+  logger.info('Email: configurado con Resend API');
 } else {
-  logger.info('Email: modo simulado (sin EMAIL_USER/EMAIL_PASS)');
+  logger.info('Email: modo simulado (sin RESEND_API_KEY)');
 }
 
-// ── Enviar email real o simulado ─────────────────────────────
+// ── Enviar email via Resend HTTP API ─────────────────────────
 async function enviarEmail(para, asunto, html) {
-  if (transporter) {
+  if (RESEND_API_KEY) {
     try {
-      var info = await transporter.sendMail({
-        from: '"Dream Day" <' + process.env.EMAIL_USER + '>',
-        to: para,
-        subject: asunto,
-        html: html
+      var response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + RESEND_API_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: FROM_EMAIL,
+          to: [para],
+          subject: asunto,
+          html: html
+        })
       });
-      logger.info('Email enviado correctamente', { context: { para, asunto, messageId: info.messageId } });
-      return { enviado: true, simulado: false, messageId: info.messageId };
+
+      var data = await response.json();
+
+      if (response.ok) {
+        logger.info('Email enviado correctamente via Resend', { context: { para, asunto, id: data.id } });
+        return { enviado: true, simulado: false, id: data.id };
+      } else {
+        logger.error('Resend error: ' + JSON.stringify(data));
+        console.log('\n⚠️  Resend error: ' + JSON.stringify(data));
+      }
     } catch (err) {
       logger.error('Error enviando email: ' + err.message);
       console.log('\n⚠️  Error enviando email: ' + err.message);
@@ -100,14 +96,13 @@ var emailService = {
     var link = (process.env.FRONTEND_URL || 'http://localhost:5173') + '/admin/reset-password?token=' + token;
     var html = plantillaHTML('Recuperar Contraseña',
       '<p style="color:#555;line-height:1.6;">Hola' + (nombre ? ' <strong>' + nombre + '</strong>' : '') + ',</p>' +
-      '<p style="color:#555;line-height:1.6;">Recibimos una solicitud para restablecer tu contraseña. Haz clic en el botón de abajo:</p>' +
+      '<p style="color:#555;line-height:1.6;">Recibimos una solicitud para restablecer tu contraseña:</p>' +
       '<div style="text-align:center;margin:25px 0;">' +
       '<a href="' + link + '" style="display:inline-block;background:linear-gradient(135deg,#C9A68D,#D4B8A5);color:#fff;text-decoration:none;padding:14px 35px;border-radius:10px;font-weight:bold;font-size:1rem;">Restablecer Contraseña</a>' +
       '</div>' +
-      '<p style="color:#999;font-size:0.8rem;">O copia y pega este enlace:</p>' +
+      '<p style="color:#999;font-size:0.8rem;">O copia este enlace:</p>' +
       '<p style="color:#C9A68D;font-size:0.8rem;word-break:break-all;">' + link + '</p>' +
-      '<p style="color:#555;font-size:0.85rem;">Este enlace expira en <strong>30 minutos</strong>.</p>' +
-      '<p style="color:#999;font-size:0.8rem;">Si no solicitaste esto, ignora este mensaje.</p>'
+      '<p style="color:#555;font-size:0.85rem;">Expira en <strong>30 minutos</strong>.</p>'
     );
     return await enviarEmail(email, 'Recuperar contraseña — Dream Day', html);
   },
@@ -138,8 +133,8 @@ var emailService = {
     var whatsappLink = 'https://wa.me/524492870267?text=Hola!%20Mi%20cotización%20' + codigoReferencia + '%20fue%20aceptada.%20Quisiera%20coordinar%20los%20detalles.';
     var html = plantillaHTML('¡Tu cotización fue aceptada! 🎉',
       '<p style="color:#555;line-height:1.6;">Hola <strong>' + (nombre || 'Cliente') + '</strong>,</p>' +
-      '<p style="color:#555;line-height:1.6;">¡Excelentes noticias! Tu cotización con código <strong style="color:#C9A68D;">' + codigoReferencia + '</strong> ha sido <strong style="color:#27ae60;">aceptada</strong>.</p>' +
-      '<p style="color:#555;line-height:1.6;">El siguiente paso es coordinar los detalles por WhatsApp:</p>' +
+      '<p style="color:#555;line-height:1.6;">Tu cotización <strong style="color:#C9A68D;">' + codigoReferencia + '</strong> ha sido <strong style="color:#27ae60;">aceptada</strong>.</p>' +
+      '<p style="color:#555;line-height:1.6;">Coordina los detalles por WhatsApp:</p>' +
       '<div style="text-align:center;margin:25px 0;">' +
       '<a href="' + whatsappLink + '" style="display:inline-block;background:#25D366;color:#fff;text-decoration:none;padding:14px 35px;border-radius:10px;font-weight:bold;font-size:1rem;">💬 Contactar por WhatsApp</a>' +
       '</div>'
@@ -151,11 +146,11 @@ var emailService = {
     var consultarLink = (process.env.FRONTEND_URL || 'http://localhost:5173') + '/mi-cotizacion';
     var html = plantillaHTML('Cotización Recibida',
       '<p style="color:#555;line-height:1.6;">Hola <strong>' + (nombre || 'Cliente') + '</strong>,</p>' +
-      '<p style="color:#555;line-height:1.6;">Recibimos tu solicitud de cotización. Tu código de referencia es:</p>' +
+      '<p style="color:#555;line-height:1.6;">Recibimos tu solicitud. Tu código:</p>' +
       '<div style="text-align:center;margin:25px 0;">' +
       '<span style="display:inline-block;background:#F5EDE6;color:#5B3A29;font-size:1.8rem;font-weight:bold;letter-spacing:4px;padding:15px 30px;border-radius:12px;border:2px solid #E8D5C4;">' + codigoReferencia + '</span>' +
       '</div>' +
-      '<p style="color:#555;line-height:1.6;">Revisaremos tu solicitud y te contactaremos por WhatsApp.</p>' +
+      '<p style="color:#555;line-height:1.6;">Te contactaremos por WhatsApp para los detalles.</p>' +
       '<div style="text-align:center;margin:20px 0;">' +
       '<a href="' + consultarLink + '" style="display:inline-block;background:linear-gradient(135deg,#C9A68D,#D4B8A5);color:#fff;text-decoration:none;padding:12px 30px;border-radius:10px;font-weight:bold;">Consultar estado</a>' +
       '</div>'
