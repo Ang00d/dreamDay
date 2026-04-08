@@ -5,12 +5,15 @@
    GET    /api/auth/sessions           — Listar sesiones activas
    DELETE /api/auth/sessions/:id       — Cerrar sesión específica
    DELETE /api/auth/sessions           — Cerrar todas las demás sesiones
+   
+   Fix: ahora invalida refresh tokens al cerrar sesiones
+   para que el otro navegador no pueda re-autenticarse.
    ============================================ */
-
 var express = require('express');
 var router = express.Router();
 var auth = require('../middleware/auth');
 var Session = require('../models/Session');
+var RefreshToken = require('../models/RefreshToken');
 var logger = require('../config/logger');
 
 // Todas las rutas requieren autenticación
@@ -59,10 +62,17 @@ router.delete('/:id', async function (req, res, next) {
       return res.status(400).json({ error: 'Usa /logout para cerrar tu sesión actual.' });
     }
 
+    // Desactivar la sesión
     sesion.activa = false;
     await sesion.save();
 
-    logger.info('Sesión remota cerrada', {
+    // Invalidar TODOS los refresh tokens de esa sesión
+    await RefreshToken.updateMany(
+      { sessionId: sesion._id, usado: false },
+      { usado: true }
+    );
+
+    logger.info('Sesión remota cerrada (+ refresh tokens invalidados)', {
       context: { usuarioId: req.usuario._id, sesionId: sesion._id }
     });
 
@@ -74,6 +84,16 @@ router.delete('/:id', async function (req, res, next) {
 // Cerrar todas las sesiones excepto la actual
 router.delete('/', async function (req, res, next) {
   try {
+    // Obtener IDs de las sesiones que se van a cerrar
+    var sesionesACerrar = await Session.find({
+      usuarioId: req.usuario._id,
+      activa: true,
+      tokenId: { $ne: req.tokenId }
+    }).select('_id');
+
+    var idsSessiones = sesionesACerrar.map(function (s) { return s._id; });
+
+    // Desactivar sesiones
     var resultado = await Session.updateMany(
       {
         usuarioId: req.usuario._id,
@@ -83,7 +103,15 @@ router.delete('/', async function (req, res, next) {
       { activa: false }
     );
 
-    logger.info('Todas las otras sesiones cerradas', {
+    // Invalidar refresh tokens de esas sesiones
+    if (idsSessiones.length > 0) {
+      await RefreshToken.updateMany(
+        { sessionId: { $in: idsSessiones }, usado: false },
+        { usado: true }
+      );
+    }
+
+    logger.info('Todas las otras sesiones cerradas (+ refresh tokens)', {
       context: { usuarioId: req.usuario._id, cerradas: resultado.modifiedCount }
     });
 
