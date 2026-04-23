@@ -1,0 +1,445 @@
+/* ============================================
+   DREAM DAY — CategoriasPage.css
+   Mobile-first (base 320px+)
+   ============================================ */
+
+.categorias-admin {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* === Header === */
+.categorias-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.categorias-header h1 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.6rem;
+  color: var(--texto-oscuro, #2c1810);
+  margin: 0 0 0.25rem 0;
+}
+
+.categorias-header p {
+  font-size: 0.85rem;
+  color: var(--texto-medio, #8b7355);
+  margin: 0;
+}
+
+.btn-crear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.2rem;
+  background: linear-gradient(135deg, var(--cafe-claro, #C9A68D), var(--cafe-pastel, #D4B8A5));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  align-self: flex-start;
+}
+
+.btn-crear:active {
+  transform: scale(0.97);
+}
+
+/* === Loading / Vacío === */
+.categorias-loading,
+.categorias-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 1rem;
+  color: var(--texto-medio, #8b7355);
+  background: var(--cafe-muy-claro, #FDF9F5);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.categorias-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--cafe-claro, #E8D5C4);
+  border-top-color: var(--cafe-pastel, #C9A68D);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === Grid de categorías === */
+.categorias-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.categoria-card {
+  background: #fff;
+  border: 1.5px solid var(--cafe-claro, #E8D5C4);
+  border-radius: 12px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.categoria-card.inactiva {
+  opacity: 0.65;
+  background: #fafafa;
+}
+
+.categoria-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.categoria-icono {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.categoria-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.categoria-info h3 {
+  margin: 0;
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.15rem;
+  color: var(--texto-oscuro, #2c1810);
+  line-height: 1.2;
+}
+
+.categoria-slug {
+  display: inline-block;
+  font-size: 0.72rem;
+  color: var(--texto-medio, #8b7355);
+  font-family: monospace;
+  margin-top: 0.15rem;
+}
+
+.categoria-estado {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.categoria-estado.activa {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.categoria-estado.inactiva {
+  background: #f5f0eb;
+  color: #8b7355;
+}
+
+/* === Stats === */
+.categoria-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--cafe-muy-claro, #F5EDE6);
+  border-bottom: 1px solid var(--cafe-muy-claro, #F5EDE6);
+  margin-bottom: 0.8rem;
+}
+
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--texto-medio, #8b7355);
+  white-space: nowrap;
+}
+
+.orden-label {
+  font-weight: 600;
+}
+
+/* === Actions === */
+.categoria-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-accion {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.55rem 0.8rem;
+  border: 1.5px solid;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.2s ease;
+  min-height: 40px;
+}
+
+.btn-editar {
+  border-color: var(--cafe-pastel, #C9A68D);
+  color: var(--cafe-pastel, #8b7355);
+}
+
+.btn-editar:active {
+  background: var(--cafe-muy-claro, #FDF9F5);
+  transform: scale(0.97);
+}
+
+.btn-desactivar {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.btn-desactivar:active {
+  background: #fce4ec;
+  transform: scale(0.97);
+}
+
+.btn-activar {
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+.btn-activar:active {
+  background: #e8f5e9;
+  transform: scale(0.97);
+}
+
+/* ═══════════════════════════════════
+   MODAL FORMULARIO
+   ═══════════════════════════════════ */
+
+.cat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cat-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cat-form-field label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--texto-oscuro, #2c1810);
+}
+
+.cat-form-field input {
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--cafe-claro, #E8D5C4);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  min-height: 44px;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.cat-form-field input:focus {
+  outline: none;
+  border-color: var(--cafe-pastel, #C9A68D);
+}
+
+.field-hint {
+  font-size: 0.72rem;
+  color: var(--texto-medio, #8b7355);
+}
+
+.cat-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+/* Selector de ícono */
+.icono-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.icono-input {
+  font-size: 1.5rem !important;
+  text-align: center;
+  max-width: 80px;
+}
+
+.icono-sugerencias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.6rem;
+  background: var(--cafe-muy-claro, #FDF9F5);
+  border-radius: 8px;
+}
+
+.icono-chip {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.icono-chip:active {
+  transform: scale(0.92);
+}
+
+.icono-chip.seleccionado {
+  border-color: var(--cafe-pastel, #C9A68D);
+  background: var(--cafe-muy-claro, #FDF9F5);
+  box-shadow: 0 2px 6px rgba(201, 166, 141, 0.25);
+}
+
+/* Botones del formulario */
+.cat-form-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.btn-cancelar,
+.btn-guardar {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  min-height: 44px;
+  transition: all 0.2s ease;
+}
+
+.btn-cancelar {
+  background: #f5f0eb;
+  color: var(--texto-medio, #8b7355);
+}
+
+.btn-cancelar:active {
+  transform: scale(0.97);
+}
+
+.btn-guardar {
+  background: linear-gradient(135deg, var(--cafe-claro, #C9A68D), var(--cafe-pastel, #D4B8A5));
+  color: #fff;
+}
+
+.btn-guardar:active {
+  transform: scale(0.97);
+}
+
+.btn-guardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Dependencias lista */
+.dependencias-lista {
+  background: #fff8e1;
+  border-left: 3px solid #ffa726;
+  padding: 0.8rem 1rem 0.8rem 1.5rem;
+  margin: 0.8rem 0;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  color: #7A5A00;
+}
+
+.dependencias-lista li {
+  margin-bottom: 0.3rem;
+}
+
+.dependencias-lista li:last-child {
+  margin-bottom: 0;
+}
+
+/* ═══════════════════════════════════
+   TABLET/DESKTOP
+   ═══════════════════════════════════ */
+
+@media (min-width: 600px) {
+  .categorias-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .categorias-header h1 {
+    font-size: 1.85rem;
+  }
+
+  .categorias-header p {
+    font-size: 0.9rem;
+  }
+
+  .categorias-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .btn-crear:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(201, 166, 141, 0.3);
+  }
+
+  .btn-accion:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-editar:hover {
+    background: var(--cafe-muy-claro, #FDF9F5);
+  }
+
+  .btn-desactivar:hover {
+    background: #fce4ec;
+  }
+
+  .btn-activar:hover {
+    background: #e8f5e9;
+  }
+
+  .icono-chip:hover {
+    border-color: var(--cafe-claro, #E8D5C4);
+  }
+}
+
+@media (min-width: 900px) {
+  .categorias-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

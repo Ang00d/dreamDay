@@ -9,6 +9,8 @@ var TABS = [
   { value: 'pendiente',       label: 'Pendientes',   emoji: '🕐' },
   { value: 'en_negociacion',  label: 'Negociación',  emoji: '💬' },
   { value: 'confirmada',      label: 'Confirmadas',  emoji: '✅' },
+  { value: 'completada',      label: 'Completadas',  emoji: '🎉' },
+  { value: 'conflicto',       label: 'Conflicto',    emoji: '⚠️' },
   { value: 'rechazada',       label: 'Rechazadas',   emoji: '❌' },
   { value: 'cancelada',       label: 'Canceladas',   emoji: '🚫' },
   { value: 'calendario',      label: 'Calendario',   emoji: '📅' },
@@ -39,7 +41,7 @@ export default function CotizacionesPage() {
 
   useEffect(function () {
     async function cargarConteos() {
-      var estados = ['pendiente', 'en_negociacion', 'confirmada', 'rechazada', 'cancelada'];
+      var estados = ['pendiente', 'en_negociacion', 'confirmada', 'completada', 'conflicto', 'rechazada', 'cancelada'];
       var nuevos = {};
       await Promise.all(estados.map(async function (est) {
         try {
@@ -117,6 +119,7 @@ export default function CotizacionesPage() {
       pendiente: { label: 'Pendiente', cls: 'badge-pendiente' },
       en_negociacion: { label: 'En negociación', cls: 'badge-negociacion' },
       confirmada: { label: 'Confirmada', cls: 'badge-confirmada' },
+      completada: { label: 'Completada', cls: 'badge-completada' },
       rechazada: { label: 'Rechazada', cls: 'badge-rechazada' },
       cancelada: { label: 'Cancelada', cls: 'badge-cancelada' },
       conflicto: { label: 'Conflicto', cls: 'badge-conflicto' },

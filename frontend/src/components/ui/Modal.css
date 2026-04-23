@@ -29,6 +29,8 @@
   padding: 2rem;
   max-width: 480px;
   width: 100%;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
   position: relative;
   animation: modalSlideIn 0.3s ease;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
@@ -41,19 +43,20 @@
 
 /* Botón cerrar */
 .modal-cerrar {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blanco, #fff);
   border: none;
   color: var(--texto-medio, #888);
   cursor: pointer;
   padding: 0.3rem;
   border-radius: 8px;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 1;
 }
 
 .modal-cerrar:hover {

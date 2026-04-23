@@ -3,9 +3,6 @@
    
    POST /api/cotizaciones                  — Crear solicitud
    GET  /api/cotizaciones/consultar/:codigo — Consultar por codigo
-   
-   ACTUALIZADO: Valida anticipación mínima por categoría.
-   Ej: Comida/Bebidas requieren 7 días de anticipación.
    ============================================ */
 
 var express = require('express');
@@ -77,46 +74,10 @@ router.post('/', async function (req, res, next) {
     var serviciosDB = await Servicio.find({
       _id: { $in: serviciosIds },
       activo: true
-    }).populate('categoria', 'nombre anticipacionMinimaDias');
+    });
 
     if (serviciosDB.length !== serviciosIds.length) {
       return res.status(400).json({ error: 'Uno o mas servicios no existen o estan inactivos.' });
-    }
-
-    // ---- Validar anticipación mínima por categoría ----
-    var fechaEvento = new Date(body.evento.fecha + 'T12:00:00');
-    var ahora = new Date();
-    // Calcular días naturales de diferencia
-    var diffMs = fechaEvento.getTime() - ahora.getTime();
-    var diasAnticipacion = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    var violaciones = [];
-    serviciosDB.forEach(function (servicio) {
-      if (servicio.categoria && servicio.categoria.anticipacionMinimaDias) {
-        var minDias = servicio.categoria.anticipacionMinimaDias;
-        if (diasAnticipacion < minDias) {
-          // Evitar duplicar la misma categoría en el mensaje
-          var yaIncluida = violaciones.find(function (v) {
-            return v.categoria === servicio.categoria.nombre;
-          });
-          if (!yaIncluida) {
-            violaciones.push({
-              categoria: servicio.categoria.nombre,
-              diasRequeridos: minDias,
-              diasDisponibles: diasAnticipacion
-            });
-          }
-        }
-      }
-    });
-
-    if (violaciones.length > 0) {
-      var mensajes = violaciones.map(function (v) {
-        return v.categoria + ' requiere al menos ' + v.diasRequeridos + ' días de anticipación (solo tienes ' + v.diasDisponibles + ')';
-      });
-      return res.status(400).json({
-        error: 'Anticipación insuficiente: ' + mensajes.join('. ') + '.'
-      });
     }
 
     // ---- Preparar servicios con nombre ----
@@ -194,7 +155,7 @@ router.get('/consultar/:codigo', async function (req, res, next) {
 
     var cotizacion = await Cotizacion.findOne({
       codigoReferencia: codigo
-    }).select('codigoReferencia estado evento.fecha evento.horaInicio servicios.nombre servicios.cantidad createdAt');
+    }).select('codigoReferencia estado evento cliente.nombre servicios.nombre servicios.cantidad createdAt');
 
     if (!cotizacion) {
       return res.status(404).json({ error: 'Cotizacion no encontrada. Verifica el codigo.' });
@@ -209,8 +170,15 @@ router.get('/consultar/:codigo', async function (req, res, next) {
       data: {
         codigoReferencia: cotizacion.codigoReferencia,
         estado: cotizacion.estado,
-        fechaEvento: cotizacion.evento.fecha,
-        horaInicio: cotizacion.evento.horaInicio,
+        evento: {
+          fecha: cotizacion.evento.fecha,
+          horaInicio: cotizacion.evento.horaInicio,
+          personas: cotizacion.evento.personas,
+          ubicacion: cotizacion.evento.ubicacion
+        },
+        cliente: {
+          nombre: cotizacion.cliente.nombre
+        },
         servicios: cotizacion.servicios.map(function (s) {
           return { nombre: s.nombre, cantidad: s.cantidad };
         }),

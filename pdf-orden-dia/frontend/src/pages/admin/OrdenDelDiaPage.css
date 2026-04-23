@@ -1,0 +1,375 @@
+/* ============================================
+   DREAM DAY — OrdenDelDiaPage.css
+   Mobile-first (320px+)
+   ============================================ */
+
+.orden-dia-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* === Header === */
+.orden-dia-header {
+  margin-bottom: 1.2rem;
+}
+
+.orden-dia-header h1 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.6rem;
+  color: var(--texto-oscuro, #2c1810);
+  margin: 0 0 0.25rem 0;
+}
+
+.orden-dia-header p {
+  font-size: 0.85rem;
+  color: var(--texto-medio, #8b7355);
+  margin: 0;
+}
+
+/* === Selector de fecha === */
+.orden-selector-card {
+  background: #fff;
+  border: 1.5px solid var(--cafe-claro, #E8D5C4);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.orden-selector-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.orden-fecha-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.orden-fecha-field label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--texto-oscuro, #2c1810);
+}
+
+.orden-fecha-field input[type="date"] {
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--cafe-claro, #E8D5C4);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  min-height: 44px;
+  background: #fff;
+}
+
+.orden-fecha-field input[type="date"]:focus {
+  outline: none;
+  border-color: var(--cafe-pastel, #C9A68D);
+}
+
+.orden-fecha-humana {
+  font-size: 0.78rem;
+  color: var(--texto-medio, #8b7355);
+  text-transform: capitalize;
+  font-style: italic;
+}
+
+.btn-descargar-pdf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  background: linear-gradient(135deg, var(--cafe-claro, #C9A68D), var(--cafe-pastel, #D4B8A5));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  box-shadow: 0 3px 10px rgba(201, 166, 141, 0.25);
+}
+
+.btn-descargar-pdf:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-descargar-pdf:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* === Loading / Vacío === */
+.orden-loading,
+.orden-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 1rem;
+  color: var(--texto-medio, #8b7355);
+  background: var(--cafe-muy-claro, #FDF9F5);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.orden-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--cafe-claro, #E8D5C4);
+  border-top-color: var(--cafe-pastel, #C9A68D);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === Estadísticas === */
+.orden-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.orden-stat {
+  background: linear-gradient(135deg, var(--cafe-muy-claro, #FDF9F5), #fff);
+  border: 1.5px solid var(--cafe-claro, #E8D5C4);
+  border-radius: 10px;
+  padding: 0.9rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.orden-stat-num {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--cafe-pastel, #C9A68D);
+  line-height: 1;
+}
+
+.orden-stat-label {
+  font-size: 0.68rem;
+  color: var(--texto-medio, #8b7355);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* === Lista de eventos === */
+.orden-eventos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.orden-evento {
+  background: #fff;
+  border: 1.5px solid var(--cafe-claro, #E8D5C4);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Header del evento */
+.orden-evento-head {
+  background: linear-gradient(135deg, var(--cafe-claro, #C9A68D), var(--cafe-pastel, #D4B8A5));
+  padding: 0.75rem 1rem;
+  color: #fff;
+}
+
+.orden-evento-num {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.num-circle {
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.orden-evento-hora {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.orden-evento-codigo {
+  display: block;
+  font-size: 0.72rem;
+  opacity: 0.85;
+  font-family: monospace;
+  margin-top: 0.1rem;
+}
+
+/* Info del evento */
+.orden-evento-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--cafe-muy-claro, #F5EDE6);
+}
+
+.orden-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--texto-oscuro, #2c1810);
+}
+
+.orden-info-item svg {
+  color: var(--cafe-pastel, #C9A68D);
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.orden-info-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.orden-info-item strong {
+  font-weight: 600;
+}
+
+.orden-info-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--texto-medio, #8b7355);
+}
+
+/* Servicios */
+.orden-evento-servicios {
+  padding: 0.75rem 1rem;
+  background: var(--cafe-muy-claro, #FDF9F5);
+}
+
+.orden-servicios-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--texto-medio, #8b7355);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.5rem;
+}
+
+.orden-servicios-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.orden-servicio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  background: #fff;
+  border-radius: 6px;
+  font-size: 0.82rem;
+}
+
+.orden-servicio-nombre {
+  color: var(--texto-oscuro, #2c1810);
+  font-weight: 500;
+}
+
+.orden-servicio-meta {
+  color: var(--texto-medio, #8b7355);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+/* Notas */
+.orden-evento-notas {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  background: #fff8e1;
+  border-top: 1px solid #ffe082;
+  font-size: 0.82rem;
+  color: #7A5A00;
+  font-style: italic;
+}
+
+.orden-evento-notas svg {
+  color: #ff9800;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+/* ═══════════════════════════════════
+   TABLET/DESKTOP
+   ═══════════════════════════════════ */
+
+@media (min-width: 600px) {
+  .orden-dia-header h1 {
+    font-size: 1.85rem;
+  }
+
+  .orden-selector-row {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  .orden-fecha-field {
+    flex: 1;
+  }
+
+  .btn-descargar-pdf:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(201, 166, 141, 0.35);
+  }
+
+  .orden-stat-num {
+    font-size: 2.2rem;
+  }
+
+  .orden-evento-info {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .orden-info-item {
+    flex: 1;
+  }
+}

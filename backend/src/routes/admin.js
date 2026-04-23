@@ -180,10 +180,11 @@ router.patch('/cotizaciones/:id', async function (req, res, next) {
     }
 
     var body = req.body;
+    var conflictosAutoMarcados = 0;
 
     // Actualizar estado
     if (body.estado) {
-      var estadosValidos = ['pendiente', 'en_negociacion', 'confirmada', 'rechazada', 'cancelada', 'conflicto'];
+      var estadosValidos = ['pendiente', 'en_negociacion', 'confirmada', 'rechazada', 'cancelada', 'conflicto', 'completada'];
       if (estadosValidos.indexOf(body.estado) === -1) {
         return res.status(400).json({ error: 'Estado invalido.' });
       }
@@ -239,6 +240,86 @@ router.patch('/cotizaciones/:id', async function (req, res, next) {
           });
         }
         logger.info('Disponibilidad actualizada al confirmar', { cotizacionId: cotizacion._id, fecha: cotizacion.evento.fecha });
+
+        // ★ DETECCIÓN AUTOMÁTICA DE CONFLICTOS
+        // Buscar otras cotizaciones pendientes/en_negociacion en la misma fecha
+        // que compartan al menos un servicio con esta que acabamos de confirmar.
+        // Marcarlas como 'conflicto' para que el admin las revise.
+        try {
+          var serviciosIdsConfirmados = cotizacion.servicios.map(function (s) {
+            return s.servicioId.toString();
+          });
+
+          var otrasCotizaciones = await Cotizacion.find({
+            _id: { $ne: cotizacion._id },
+            'evento.fecha': cotizacion.evento.fecha,
+            estado: { $in: ['pendiente', 'en_negociacion'] },
+            'servicios.servicioId': { $in: serviciosIdsConfirmados }
+          });
+
+          var marcadas = 0;
+          for (var m = 0; m < otrasCotizaciones.length; m++) {
+            var otra = otrasCotizaciones[m];
+
+            // Identificar qué servicios están en conflicto
+            var serviciosEnConflicto = otra.servicios.filter(function (s) {
+              return serviciosIdsConfirmados.indexOf(s.servicioId.toString()) !== -1;
+            });
+
+            // Verificar capacidad: si alguno de los servicios en conflicto
+            // aún tiene capacidad disponible, NO marcar (aún es viable).
+            var hayConflictoReal = false;
+            for (var n = 0; n < serviciosEnConflicto.length; n++) {
+              var servConf = serviciosEnConflicto[n];
+              var servDbConf = await Servicio.findById(servConf.servicioId).select('capacidadDiaria');
+              var capConf = (servDbConf && servDbConf.capacidadDiaria) ? servDbConf.capacidadDiaria : 1;
+
+              var ocupadosConf = await Disponibilidad.countDocuments({
+                servicioId: servConf.servicioId,
+                fecha: otra.evento.fecha,
+                estado: { $in: ['ocupado', 'bloqueado_admin'] }
+              });
+
+              if (ocupadosConf >= capConf) {
+                hayConflictoReal = true;
+                break;
+              }
+            }
+
+            if (hayConflictoReal) {
+              otra.estado = 'conflicto';
+              // Agregar nota automática (preservando notas existentes)
+              var nombresConflicto = serviciosEnConflicto.map(function (s) { return s.nombre; }).join(', ');
+              var notaAuto = '[Auto] Conflicto detectado el ' + new Date().toISOString().split('T')[0] +
+                ': servicio(s) sin capacidad — ' + nombresConflicto +
+                '. Otra cotización fue confirmada para la misma fecha.';
+              otra.notasAdmin = otra.notasAdmin
+                ? otra.notasAdmin + '\n\n' + notaAuto
+                : notaAuto;
+              await otra.save();
+              marcadas++;
+            }
+          }
+
+          if (marcadas > 0) {
+            conflictosAutoMarcados = marcadas;
+            logger.info('Cotizaciones marcadas como conflicto automáticamente', {
+              correlationId: req.correlationId,
+              context: {
+                cotizacionConfirmada: cotizacion._id,
+                fecha: cotizacion.evento.fecha,
+                marcadas: marcadas
+              }
+            });
+          }
+        } catch (conflictErr) {
+          // No hacer falla la confirmación si la detección de conflictos falla
+          logger.error('Error detectando conflictos automáticos', {
+            correlationId: req.correlationId,
+            error: conflictErr.message,
+            cotizacionId: cotizacion._id
+          });
+        }
       }
 
       // Al cancelar/rechazar: liberar registros de Disponibilidad
@@ -292,7 +373,10 @@ router.patch('/cotizaciones/:id', async function (req, res, next) {
       }
     });
 
-    res.json({ data: cotizacion });
+    res.json({
+      data: cotizacion,
+      conflictosAutoMarcados: conflictosAutoMarcados
+    });
 
   } catch (err) {
     next(err);

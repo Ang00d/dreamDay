@@ -1,0 +1,333 @@
+/* ============================================
+   DREAM DAY — CalendarioWizard
+   Mini calendario para el wizard de cotización
+   
+   MOBILE-FIRST: diseñado primero para 320-480px,
+   luego escala hacia arriba. Los días son grandes,
+   los dots bien visibles y touch targets ≥ 36px.
+   ============================================ */
+
+/* ══════════════════════════════════════════
+   BASE (mobile 320px+) — diseño principal
+   ══════════════════════════════════════════ */
+
+.cal-wizard {
+  background: var(--blanco);
+  border: 1.5px solid var(--cafe-suave);
+  border-radius: 12px;
+  padding: 0.8rem 0.6rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 14px var(--sombra);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* === Navegación === */
+.cal-wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  padding: 0 0.2rem;
+}
+
+.cal-wizard-nav-btn {
+  background: none;
+  border: 1.5px solid var(--cafe-suave);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--texto-medio);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.cal-wizard-nav-btn:active:not(:disabled) {
+  background: var(--cafe-muy-claro);
+  transform: scale(0.95);
+}
+
+.cal-wizard-mes {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--texto-oscuro);
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+  padding: 0 0.4rem;
+  text-transform: capitalize;
+  line-height: 1.2;
+}
+
+/* === Header días de la semana === */
+.cal-wizard-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.cal-wizard-dia-nombre {
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.65rem;
+  color: var(--texto-medio);
+  padding: 0.3rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* === Grid de días === */
+.cal-wizard-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-wizard-dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  min-height: 42px;
+  padding: 4px 0 3px;
+  gap: 3px;
+  box-sizing: border-box;
+}
+
+.cal-wizard-dia:active:not(.deshabilitado):not(.empty) {
+  transform: scale(0.92);
+}
+
+.cal-wizard-dia.empty {
+  cursor: default;
+  background: transparent;
+  min-height: 42px;
+}
+
+.cal-wizard-dia-num {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* === Colores === */
+.cal-wizard-dia.verde {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1.5px solid #a5d6a7;
+}
+
+.cal-wizard-dia.amarillo {
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1.5px solid #ffe082;
+}
+
+.cal-wizard-dia.rojo {
+  background: #fce4ec;
+  color: #c62828;
+  border: 1.5px solid #ef9a9a;
+}
+
+.cal-wizard-dia.deshabilitado {
+  background: #f5f0eb;
+  color: #c4b8a8;
+  cursor: not-allowed;
+  border: 1.5px solid transparent;
+  opacity: 0.55;
+}
+
+/* Hoy */
+.cal-wizard-dia.hoy {
+  box-shadow: inset 0 0 0 2px var(--cafe-claro);
+}
+
+/* Seleccionado */
+.cal-wizard-dia.seleccionado {
+  box-shadow: 0 0 0 3px var(--cafe-claro);
+  transform: scale(1.05);
+  font-weight: 700;
+  z-index: 2;
+}
+
+.cal-wizard-dia.seleccionado .cal-wizard-dia-num {
+  font-weight: 800;
+}
+
+/* === Dots de color === */
+.cal-wizard-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cal-wizard-dot.verde {
+  background: #4caf50;
+}
+
+.cal-wizard-dot.amarillo {
+  background: #ff9800;
+}
+
+.cal-wizard-dot.rojo {
+  background: #f44336;
+}
+
+/* === Leyenda === */
+.cal-wizard-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem 0.9rem;
+  margin-top: 0.8rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--cafe-muy-claro);
+}
+
+.cal-wizard-ley-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--texto-medio);
+  white-space: nowrap;
+}
+
+.cal-wizard-ley-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.cal-wizard-ley-dot.verde {
+  background: #a5d6a7;
+  border: 1px solid #66bb6a;
+}
+
+.cal-wizard-ley-dot.amarillo {
+  background: #ffe082;
+  border: 1px solid #ffa726;
+}
+
+.cal-wizard-ley-dot.rojo {
+  background: #ef9a9a;
+  border: 1px solid #ef5350;
+}
+
+/* ══════════════════════════════════════════
+   TABLET (480px+) — más respiración
+   ══════════════════════════════════════════ */
+
+@media (min-width: 480px) {
+  .cal-wizard {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  .cal-wizard-nav {
+    margin-bottom: 1rem;
+  }
+
+  .cal-wizard-mes {
+    font-size: 1.15rem;
+  }
+
+  .cal-wizard-dia-nombre {
+    font-size: 0.72rem;
+    padding: 0.4rem 0;
+  }
+
+  .cal-wizard-grid,
+  .cal-wizard-header {
+    gap: 3px;
+  }
+
+  .cal-wizard-dia {
+    min-height: 48px;
+    border-radius: 9px;
+  }
+
+  .cal-wizard-dia.empty {
+    min-height: 48px;
+  }
+
+  .cal-wizard-dia-num {
+    font-size: 0.95rem;
+  }
+
+  .cal-wizard-ley-item {
+    font-size: 0.78rem;
+  }
+
+  .cal-wizard-leyenda {
+    gap: 1.2rem;
+  }
+
+  .cal-wizard-dia:hover:not(.deshabilitado):not(.empty) {
+    transform: scale(1.06);
+  }
+}
+
+/* ══════════════════════════════════════════
+   DESKTOP (768px+) — experiencia completa
+   ══════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  .cal-wizard {
+    padding: 1.2rem;
+  }
+
+  .cal-wizard-mes {
+    font-size: 1.25rem;
+  }
+
+  .cal-wizard-dia {
+    min-height: 54px;
+  }
+
+  .cal-wizard-dia.empty {
+    min-height: 54px;
+  }
+
+  .cal-wizard-dia-num {
+    font-size: 1rem;
+  }
+
+  .cal-wizard-dia.verde:hover {
+    background: #c8e6c9;
+    box-shadow: 0 3px 10px rgba(46, 125, 50, 0.2);
+  }
+
+  .cal-wizard-dia.amarillo:hover {
+    background: #ffecb3;
+    box-shadow: 0 3px 10px rgba(245, 127, 23, 0.2);
+  }
+
+  .cal-wizard-dia.rojo:hover {
+    background: #ffcdd2;
+    box-shadow: 0 3px 10px rgba(198, 40, 40, 0.15);
+  }
+
+  .cal-wizard-nav-btn:hover:not(:disabled) {
+    border-color: var(--cafe-claro);
+    color: var(--cafe-claro);
+    background: var(--cafe-muy-claro);
+  }
+}

@@ -60,6 +60,13 @@ var servicioSchema = new mongoose.Schema({
   },
   incluye: [String],
   notas: String,
+  contenido: {
+    type: String,
+    default: ''
+    // Qué equipo/material llevar al evento
+    // Ej: "2 mesas buffet, 3 chafers, platos, cubiertos, mantel"
+    // Solo se muestra en el PDF de Orden del Día (logística)
+  },
   tipoDisponibilidad: {
     type: String,
     enum: ['unica', 'multiple'],

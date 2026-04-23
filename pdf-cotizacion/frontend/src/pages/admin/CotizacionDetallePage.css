@@ -1,0 +1,365 @@
+/* ===== DETALLE COTIZACIÓN ===== */
+.det-page {
+  max-width: 700px;
+  padding-bottom: 2rem;
+}
+
+/* ===== HEADER ===== */
+.det-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.det-back {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blanco);
+  border: 1.5px solid var(--cafe-suave);
+  border-radius: 10px;
+  color: var(--texto-oscuro);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.det-back:hover {
+  border-color: var(--cafe-claro);
+  color: var(--cafe-claro);
+}
+
+.det-header-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Botón PDF */
+.det-btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  background: linear-gradient(135deg, var(--cafe-claro, #C9A68D), var(--cafe-pastel, #D4B8A5));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  flex-shrink: 0;
+}
+
+.det-btn-pdf:active {
+  transform: scale(0.97);
+}
+
+.det-btn-pdf:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(201, 166, 141, 0.3);
+}
+
+.det-btn-pdf-label {
+  font-size: 0.82rem;
+}
+
+@media (max-width: 480px) {
+  .det-btn-pdf-label {
+    display: none;
+  }
+
+  .det-btn-pdf {
+    padding: 0.55rem 0.6rem;
+    min-width: 40px;
+    justify-content: center;
+  }
+}
+
+.det-codigo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--texto-oscuro);
+  margin: 0;
+}
+
+/* ===== CARDS ===== */
+.det-card {
+  background: var(--blanco);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 12px var(--sombra);
+  margin-bottom: 1rem;
+}
+
+.det-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--texto-oscuro);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--cafe-suave);
+}
+
+.det-card-title svg {
+  color: var(--cafe-claro);
+}
+
+/* ===== INFO GRID ===== */
+.det-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.det-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: var(--texto-medio);
+}
+
+.det-info-item svg {
+  color: var(--cafe-claro);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.det-info-full {
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--cafe-muy-claro);
+}
+
+/* ===== SERVICIOS ===== */
+.det-servicios-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.det-servicio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.75rem;
+  background: var(--cafe-muy-claro);
+  border-radius: 10px;
+  gap: 0.5rem;
+}
+
+.det-servicio-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.det-servicio-nombre {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texto-oscuro);
+}
+
+.det-servicio-cantidad {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: var(--texto-medio);
+}
+
+.det-servicio-precios {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+  flex-shrink: 0;
+}
+
+.det-servicio-unitario {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  color: var(--texto-medio);
+}
+
+.det-servicio-subtotal {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cafe-claro);
+}
+
+/* ===== TOTAL ===== */
+.det-total {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  margin-top: 0.75rem;
+  border-top: 2px solid var(--cafe-suave);
+}
+
+.det-total svg {
+  color: var(--cafe-claro);
+}
+
+.det-total-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: var(--texto-medio);
+  font-weight: 500;
+}
+
+.det-total-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--texto-oscuro);
+  margin-left: auto;
+}
+
+/* ===== ACTIONS ===== */
+.det-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.det-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0.5rem;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.det-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.det-btn-confirm {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: var(--blanco);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.25);
+}
+
+.det-btn-confirm:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(39, 174, 96, 0.35);
+}
+
+.det-btn-reject {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  color: var(--blanco);
+  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.25);
+}
+
+.det-btn-reject:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(192, 57, 43, 0.35);
+}
+
+.det-btn-negotiate {
+  background: linear-gradient(135deg, #2980b9, #3498db);
+  color: var(--blanco);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+}
+
+.det-btn-negotiate:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(52, 152, 219, 0.35);
+}
+
+.det-btn-cancel {
+  background: var(--blanco);
+  color: var(--texto-medio);
+  border: 1.5px solid var(--cafe-suave);
+}
+
+.det-btn-cancel:hover:not(:disabled) {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+/* ===== WHATSAPP ===== */
+.det-whatsapp-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem;
+  margin-top: 1rem;
+  background: #25D366;
+  color: var(--blanco);
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+}
+
+.det-whatsapp-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+}
+
+/* ===== LOADING / ERROR ===== */
+.det-loading, .det-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 1rem;
+  color: var(--texto-medio);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.det-back-btn {
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(135deg, var(--cafe-claro), var(--cafe-pastel));
+  color: var(--blanco);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .det-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .det-codigo {
+    font-size: 1.2rem;
+  }
+}
