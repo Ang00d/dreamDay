@@ -9,7 +9,7 @@
 .calendario-page {
   min-height: calc(100vh - var(--header-height));
   background: linear-gradient(135deg, var(--crema) 0%, var(--cafe-muy-claro) 100%);
-  padding: 3rem 2rem;
+  padding: 1.5rem 1rem;
 }
 
 .calendario-container {
@@ -314,7 +314,7 @@
 /* === Responsive === */
 @media (max-width: 768px) {
   .calendario-page {
-    padding: 1.5rem 1rem;
+    padding: 1rem 0.8rem;
   }
 
   .calendario-card {

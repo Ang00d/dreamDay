@@ -240,12 +240,22 @@ export function generarPdfCotizacion(cotizacion, modo) {
   var servicios = cotizacion.servicios || [];
 
   // Encabezados de la tabla
-  var colX = {
-    servicio: margin + 2,
-    cantidad: modo === 'admin' ? 115 : 150,
-    precioUnit: 145,
-    total: 180
-  };
+  var colX;
+  if (modo === 'admin') {
+    colX = {
+      servicio: margin + 2,
+      cantidad: 115,
+      precioUnit: 145,
+      total: 180
+    };
+  } else {
+    colX = {
+      servicio: margin + 2,
+      piezas: 100,
+      entrega: 135,
+      recoger: 170
+    };
+  }
 
   // Header de la tabla
   doc.setFillColor.apply(doc, COLORES.cafeClaro);
@@ -254,10 +264,14 @@ export function generarPdfCotizacion(cotizacion, modo) {
   doc.setFontSize(9);
   doc.setTextColor.apply(doc, COLORES.textoOscuro);
   doc.text('Servicio', colX.servicio, y);
-  doc.text('Cantidad', colX.cantidad, y, { align: modo === 'admin' ? 'left' : 'right' });
   if (modo === 'admin') {
+    doc.text('Cantidad', colX.cantidad, y);
     doc.text('P. Unitario', colX.precioUnit, y, { align: 'right' });
     doc.text('Total', colX.total, y, { align: 'right' });
+  } else {
+    doc.text('Piezas', colX.piezas, y);
+    doc.text('Entrega', colX.entrega, y);
+    doc.text('Recoger', colX.recoger, y);
   }
   y += 6;
 
@@ -278,13 +292,13 @@ export function generarPdfCotizacion(cotizacion, modo) {
 
     // Nombre del servicio (truncar si es muy largo)
     var nombreServ = s.nombre || (s.servicioId && s.servicioId.nombre) || 'Servicio';
-    var nombreLineas = doc.splitTextToSize(nombreServ, modo === 'admin' ? 92 : 130);
+    var nombreLineas = doc.splitTextToSize(nombreServ, 80);
     doc.text(nombreLineas[0], colX.servicio, y);
 
-    // Cantidad
-    doc.text((s.cantidad || 1).toString(), colX.cantidad, y, { align: modo === 'admin' ? 'left' : 'right' });
-
     if (modo === 'admin') {
+      // Cantidad
+      doc.text((s.cantidad || 1).toString(), colX.cantidad, y);
+
       var precioUnit = s.precioUnitario || 0;
       var precioTotal = s.precioTotal || 0;
 
@@ -302,6 +316,12 @@ export function generarPdfCotizacion(cotizacion, modo) {
       doc.setFont('helvetica', 'bold');
       doc.text(formatearPrecio(precioTotal), colX.total, y, { align: 'right' });
       doc.setFont('helvetica', 'normal');
+    } else {
+      // Modo cliente: piezas + horarios
+      var piezasTexto = s.piezas ? (s.piezas + ' ' + (s.unidad || 'pzas')) : '—';
+      doc.text(piezasTexto, colX.piezas, y);
+      doc.text(s.horaEntrega ? s.horaEntrega + ' hrs' : '—', colX.entrega, y);
+      doc.text(s.horaRecoger ? s.horaRecoger + ' hrs' : '—', colX.recoger, y);
     }
 
     y += 6;

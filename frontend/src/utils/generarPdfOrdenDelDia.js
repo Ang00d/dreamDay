@@ -222,7 +222,7 @@ export function generarPdfOrdenDelDia(data, equipoFiltro, asignaciones) {
         doc.setFont('helvetica', 'italic');
         doc.setFontSize(7);
         doc.setTextColor.apply(doc, COLORES.textoMedio);
-        var contenidoLineas = doc.splitTextToSize('▸ ' + s.contenido, pageWidth - 2 * margin - 12);
+        var contenidoLineas = doc.splitTextToSize('> ' + s.contenido, pageWidth - 2 * margin - 12);
         for (var cl = 0; cl < contenidoLineas.length; cl++) {
           if (y > pageHeight - 20) { doc.addPage(); y = 18; }
           doc.text(contenidoLineas[cl], margin + 10, y);
@@ -263,9 +263,9 @@ export function generarPdfOrdenDelDia(data, equipoFiltro, asignaciones) {
   y += 3.5;
   doc.setFont('helvetica', 'normal');
   doc.setTextColor.apply(doc, COLORES.naranja);
-  doc.text('■', margin, y);
+  doc.text('*', margin, y);
   doc.setTextColor.apply(doc, COLORES.textoMedio);
-  doc.text(' Hora naranja = 1h antes para montaje (Comida/Bebidas)   ▸ = contenido a cargar', margin + 3, y);
+  doc.text(' Hora naranja = 1h antes para montaje (Comida/Bebidas)   > = contenido a cargar', margin + 3, y);
 
   // ══════════════════════════════════════════
   // FOOTER

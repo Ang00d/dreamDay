@@ -235,10 +235,19 @@ function ConsultarPage() {
                     return (
                       <div key={i} className="consultar-servicio-item">
                         <Package size={14} />
-                        <span className="consultar-servicio-nombre">{nombre}</span>
-                        {s.cantidad && (
-                          <span className="consultar-servicio-cant">{'×' + s.cantidad}</span>
-                        )}
+                        <div className="consultar-servicio-info">
+                          <span className="consultar-servicio-nombre">{nombre}</span>
+                          {s.piezas && (
+                            <span className="consultar-servicio-piezas">
+                              {s.piezas} {s.unidad || 'piezas'}
+                            </span>
+                          )}
+                          {(s.horaEntrega || s.horaRecoger) && (
+                            <span className="consultar-servicio-horarios">
+                              <Clock size={11} /> Entrega: {s.horaEntrega || '—'} · Recoger: {s.horaRecoger || '—'}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     );
                   })}

@@ -260,16 +260,25 @@
 
 .consultar-servicio-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
   padding: 0.55rem 0.7rem;
   background: var(--cafe-muy-claro);
   border-radius: 8px;
 }
 
-.consultar-servicio-item svg {
+.consultar-servicio-item svg:first-child {
   color: var(--cafe-claro);
   flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.consultar-servicio-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .consultar-servicio-nombre {
@@ -277,7 +286,22 @@
   font-size: 0.82rem;
   color: var(--texto-oscuro);
   font-weight: 500;
-  flex: 1;
+}
+
+.consultar-servicio-horarios {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.68rem;
+  color: var(--texto-medio, #8b7355);
+}
+
+.consultar-servicio-piezas {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  color: var(--cafe-claro, #C9A68D);
+  font-weight: 600;
 }
 
 .consultar-servicio-cant {
@@ -285,6 +309,8 @@
   font-size: 0.75rem;
   color: var(--cafe-claro);
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ===== PDF DOWNLOAD ===== */

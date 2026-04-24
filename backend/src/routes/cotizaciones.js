@@ -13,6 +13,22 @@ var { generarCodigoReferencia } = require('../utils/generarCodigo');
 var logger = require('../config/logger');
 
 /**
+ * Sumar horas a un string HH:mm → HH:mm
+ */
+function sumarHorasStr(horaStr, horas) {
+  if (!horaStr || typeof horaStr !== 'string') return '--:--';
+  var partes = horaStr.split(':');
+  var h = parseInt(partes[0]);
+  var m = parseInt(partes[1]) || 0;
+  if (isNaN(h)) return '--:--';
+  var totalMin = h * 60 + m + Math.round(horas * 60);
+  if (totalMin < 0) totalMin = 0;
+  var nh = Math.floor(totalMin / 60);
+  var nm = totalMin % 60;
+  return String(nh).padStart(2, '0') + ':' + String(nm).padStart(2, '0');
+}
+
+/**
  * POST /api/cotizaciones
  * Crear una nueva solicitud de cotizacion
  * 
@@ -148,6 +164,7 @@ router.post('/', async function (req, res, next) {
  * Consultar el estado de una cotizacion por codigo
  * 
  * Solo muestra: codigo, estado, fecha, servicios (sin precios)
+ * Incluye horarios de entrega/recolección calculados.
  */
 router.get('/consultar/:codigo', async function (req, res, next) {
   try {
@@ -155,10 +172,53 @@ router.get('/consultar/:codigo', async function (req, res, next) {
 
     var cotizacion = await Cotizacion.findOne({
       codigoReferencia: codigo
-    }).select('codigoReferencia estado evento cliente.nombre servicios.nombre servicios.cantidad createdAt');
+    }).select('codigoReferencia estado evento cliente.nombre servicios createdAt');
 
     if (!cotizacion) {
       return res.status(404).json({ error: 'Cotizacion no encontrada. Verifica el codigo.' });
+    }
+
+    // Calcular horarios de entrega/recolección por servicio
+    var horaInicio = cotizacion.evento.horaInicio || '12:00';
+
+    var serviciosConHorarios = [];
+    for (var i = 0; i < cotizacion.servicios.length; i++) {
+      var servCot = cotizacion.servicios[i];
+      var servDB = null;
+
+      // Buscar info adicional del servicio
+      try {
+        servDB = await Servicio.findById(servCot.servicioId)
+          .populate('categoria', 'slug')
+          .select('duracionHoras categoria tipoPrecio requisitoMinimo')
+          .lean();
+      } catch (e) {
+        // Si falla, usar valores por defecto
+      }
+
+      var duracion = (servDB && servDB.duracionHoras) || 2;
+      var catSlug = (servDB && servDB.categoria && servDB.categoria.slug) || '';
+      var necesitaMontaje = catSlug === 'comida' || catSlug === 'bebidas';
+      var tipoPrecio = (servDB && servDB.tipoPrecio) || 'precio_fijo';
+
+      var horaEntrega = necesitaMontaje
+        ? sumarHorasStr(horaInicio, -1)
+        : horaInicio;
+      var horaRecoger = sumarHorasStr(horaInicio, duracion);
+
+      // Determinar si este servicio muestra piezas/unidades
+      var tienePiezas = tipoPrecio === 'por_pieza' || tipoPrecio === 'por_orden' || tipoPrecio === 'por_juego';
+      var unidad = (servDB && servDB.requisitoMinimo && servDB.requisitoMinimo.unidad) || 'piezas';
+
+      serviciosConHorarios.push({
+        nombre: servCot.nombre,
+        cantidad: servCot.cantidad,
+        piezas: tienePiezas ? servCot.cantidad : null,
+        unidad: tienePiezas ? unidad : null,
+        horaEntrega: horaEntrega,
+        horaRecoger: horaRecoger,
+        duracionHoras: duracion
+      });
     }
 
     logger.info('Cotizacion consultada por cliente', {
@@ -179,9 +239,7 @@ router.get('/consultar/:codigo', async function (req, res, next) {
         cliente: {
           nombre: cotizacion.cliente.nombre
         },
-        servicios: cotizacion.servicios.map(function (s) {
-          return { nombre: s.nombre, cantidad: s.cantidad };
-        }),
+        servicios: serviciosConHorarios,
         createdAt: cotizacion.createdAt
       }
     });
