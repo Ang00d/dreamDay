@@ -54,6 +54,7 @@ function FormularioWizard() {
         categoria: item.categoria || '',
         categoriaAnticipacion: item.categoriaAnticipacion || 0,
         descripcionCorta: item.descripcionCorta || '',
+        duracionHoras: item.duracionHoras || 2,
         cantidad: (item.tipoPrecio === 'precio_fijo' || item.tipoPrecio === 'por_persona') ? 1 : (item.requisitoMinimo && item.requisitoMinimo.cantidad ? item.requisitoMinimo.cantidad : 1),
         tipoPrecio: item.tipoPrecio || 'precio_fijo',
         requisitoMinimo: item.requisitoMinimo || { cantidad: 1, unidad: 'unidad' }

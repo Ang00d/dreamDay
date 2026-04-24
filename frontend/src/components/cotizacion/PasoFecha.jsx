@@ -16,6 +16,20 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
   var [consultando, setConsultando] = useState(false);
   var [modalAbierto, setModalAbierto] = useState(false);
 
+  // Helper: sumar/restar horas a un string HH:mm
+  function sumarHorasHelper(horaStr, horas) {
+    if (!horaStr) return '--:--';
+    var partes = horaStr.split(':');
+    var h = parseInt(partes[0]);
+    var m = parseInt(partes[1]) || 0;
+    if (isNaN(h)) return '--:--';
+    var totalMin = h * 60 + m + Math.round(horas * 60);
+    if (totalMin < 0) totalMin = 0;
+    var nh = Math.floor(totalMin / 60);
+    var nm = totalMin % 60;
+    return String(nh).padStart(2, '0') + ':' + String(nm).padStart(2, '0');
+  }
+
   // Calcular mínimo de personas requerido por los servicios del carrito
   var minPersonas = 1;
   if (servicios && servicios.length > 0) {
@@ -236,7 +250,6 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
               );
             })}
           </select>
-          <span className="field-hint">Horario disponible: 9:00 - 18:00</span>
         </div>
         {/* Personas */}
         <div className="form-field">
@@ -259,6 +272,105 @@ function PasoFecha({ fecha, horaInicio, personas, servicios, onUpdate, onAvisosC
           </span>
         </div>
       </div>
+
+      {/* ★ PREVIEW DE HORARIOS DE ENTREGA/RECOLECCIÓN */}
+      {fecha && horaInicio && servicios && servicios.length > 0 && (
+        <div style={{
+          marginTop: '1.2rem',
+          background: '#fff',
+          border: '1.5px solid var(--cafe-suave, #E8D5C4)',
+          borderRadius: '12px',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            padding: '0.7rem 1rem',
+            background: 'var(--cafe-muy-claro, #FDF9F5)',
+            borderBottom: '1px solid var(--cafe-suave, #E8D5C4)',
+            fontWeight: '600',
+            fontSize: '0.85rem',
+            color: 'var(--texto-oscuro, #2c1810)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem'
+          }}>
+            🚚 Horarios de entrega y recolección
+          </div>
+          <div style={{ padding: '0' }}>
+            {/* Header */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 65px 65px',
+              padding: '0.4rem 0.8rem',
+              fontSize: '0.68rem',
+              fontWeight: '700',
+              color: 'var(--texto-medio, #8b7355)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.3px',
+              borderBottom: '1px solid var(--cafe-muy-claro, #F5EDE6)'
+            }}>
+              <span>Servicio</span>
+              <span style={{ textAlign: 'center' }}>Entrega</span>
+              <span style={{ textAlign: 'center' }}>Recoger</span>
+            </div>
+            {/* Filas */}
+            {servicios.map(function (s, idx) {
+              var cat = (s.categoria || '').toLowerCase();
+              var necesitaMontaje = cat === 'comida' || cat === 'bebidas';
+              var dur = s.duracionHoras || 2;
+              var entrega = necesitaMontaje
+                ? sumarHorasHelper(horaInicio, -1)
+                : horaInicio;
+              var recoger = sumarHorasHelper(horaInicio, dur);
+
+              return (
+                <div key={s.servicioId} style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 65px 65px',
+                  padding: '0.5rem 0.8rem',
+                  fontSize: '0.82rem',
+                  color: 'var(--texto-oscuro, #2c1810)',
+                  borderBottom: idx < servicios.length - 1 ? '1px solid var(--cafe-muy-claro, #F5EDE6)' : 'none',
+                  background: idx % 2 === 0 ? 'transparent' : 'var(--cafe-muy-claro, #FDF9F5)'
+                }}>
+                  <span style={{ fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.3rem', flexWrap: 'wrap' }}>
+                    {s.nombre}
+                    {necesitaMontaje && (
+                      <span style={{
+                        fontSize: '0.58rem',
+                        background: 'rgba(230,126,34,0.12)',
+                        color: '#e67e22',
+                        padding: '0.05rem 0.3rem',
+                        borderRadius: '3px',
+                        fontWeight: '700',
+                        textTransform: 'uppercase'
+                      }}>montaje</span>
+                    )}
+                  </span>
+                  <span style={{
+                    textAlign: 'center',
+                    fontWeight: necesitaMontaje ? '700' : '500',
+                    color: necesitaMontaje ? '#e67e22' : 'var(--texto-oscuro, #2c1810)'
+                  }}>
+                    {entrega}
+                  </span>
+                  <span style={{ textAlign: 'center', fontWeight: '500' }}>
+                    {recoger}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{
+            padding: '0.45rem 0.8rem',
+            fontSize: '0.68rem',
+            color: 'var(--texto-medio, #8b7355)',
+            background: 'var(--cafe-muy-claro, #FDF9F5)',
+            borderTop: '1px solid var(--cafe-suave, #E8D5C4)'
+          }}>
+            <span style={{ color: '#e67e22', fontWeight: '700' }}>*</span> Comida y Bebidas se entregan 1h antes para montaje
+          </div>
+        </div>
+      )}
 
       {/* Indicador de verificación */}
       {consultando && fecha && (
