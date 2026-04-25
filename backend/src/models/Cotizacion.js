@@ -93,6 +93,11 @@ var cotizacionSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  googleEventId: {
+    type: String,
+    default: ''
+    // ID del evento en Google Calendar (para poder eliminarlo al cancelar)
+  },
   creadoPorIP: {
     type: String
   },

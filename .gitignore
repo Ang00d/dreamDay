@@ -2,3 +2,5 @@ node_modules/
 backend/logs/
 .env
 .DS_Store
+backend/google-credentials.json
+backend/google-credentials.json

@@ -20,6 +20,7 @@ var Cita = require('../models/Cita');
 var Disponibilidad = require('../models/Disponibilidad');
 var Servicio = require('../models/Servicio');
 var Categoria = require('../models/Categoria');
+var googleCalendar = require('../services/googleCalendar');
 var logger = require('../config/logger');
 
 // Todas las rutas admin requieren autenticacion
@@ -322,6 +323,21 @@ router.patch('/cotizaciones/:id', async function (req, res, next) {
         }
       }
 
+      // ★ GOOGLE CALENDAR: crear evento al confirmar
+      if (body.estado === 'confirmada') {
+        try {
+          var googleEventId = await googleCalendar.crearEvento(cotizacion);
+          if (googleEventId) {
+            cotizacion.googleEventId = googleEventId;
+          }
+        } catch (calErr) {
+          logger.error('Error creando evento en Google Calendar (no bloqueante)', {
+            error: calErr.message,
+            cotizacionId: cotizacion._id
+          });
+        }
+      }
+
       // Al cancelar/rechazar: liberar registros de Disponibilidad
       if ((body.estado === 'cancelada' || body.estado === 'rechazada') && cotizacion.evento && cotizacion.evento.fecha) {
         for (var j = 0; j < cotizacion.servicios.length; j++) {
@@ -333,6 +349,19 @@ router.patch('/cotizaciones/:id', async function (req, res, next) {
           });
         }
         logger.info('Disponibilidad liberada al cancelar/rechazar', { cotizacionId: cotizacion._id });
+
+        // ★ GOOGLE CALENDAR: eliminar evento al cancelar/rechazar
+        if (cotizacion.googleEventId) {
+          try {
+            await googleCalendar.eliminarEvento(cotizacion.googleEventId);
+            cotizacion.googleEventId = '';
+          } catch (calErr) {
+            logger.error('Error eliminando evento de Google Calendar', {
+              error: calErr.message,
+              cotizacionId: cotizacion._id
+            });
+          }
+        }
       }
     }
 
