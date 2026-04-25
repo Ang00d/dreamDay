@@ -105,7 +105,7 @@ export default function CotizacionDetallePage() {
   var formatFecha = function (fecha) {
     if (!fecha) return '—';
     try {
-      return new Date(fecha).toLocaleDateString('es-MX', {
+      return new Date(fecha + 'T12:00:00').toLocaleDateString('es-MX', {
         weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
       });
     } catch (e) { return fecha; }
