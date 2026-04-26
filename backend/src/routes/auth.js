@@ -32,22 +32,23 @@ var logger = require('../config/logger');
 // Rate limit estricto para login
 var loginLimiter = rateLimit({
   keyGenerator: function(req) { return req.ip + "_login"; },
-  windowMs: 15 * 60 * 1000, // 15 minutos
+  windowMs: 15 * 60 * 1000,
   max: 5,
   message: { error: 'Demasiados intentos. Espera 15 minutos.' },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  validate: false
 });
 
 // Rate limit separado para recuperación de contraseña
 var recoveryLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hora
+  windowMs: 60 * 60 * 1000,
   max: 10,
   message: { error: 'Demasiadas solicitudes de recuperación. Espera 1 hora.' },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  validate: false
 });
-
 
 // Generar código OTP de 6 dígitos
 function generarOTP() {
